@@ -1,5 +1,4 @@
-
-#include <thread>
+#include <SFML\OpenGL.hpp>
 #include "Scene.h"
 #include <iostream>
 
@@ -22,6 +21,7 @@ int main()
 
 
 	Scene scene(&window, &input);
+	scene.init();
 
 
 	while (window.isOpen())
@@ -39,7 +39,6 @@ int main()
 				window.setView(sf::View(sf::FloatRect(0, 0,
 					event.size.width, event.size.height)));
 				break;
-
 			case sf::Event::MouseMoved:
 				input.setMousePos(event.mouseMove.x, event.mouseMove.y);
 				break;
@@ -66,6 +65,10 @@ int main()
 			scene.handleInput();
 			scene.update(deltaTime);
 			scene.render();
+		}
+		else
+		{
+			scene.cleanUp();
 		}
 
 

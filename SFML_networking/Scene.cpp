@@ -8,6 +8,17 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in)
 	input = in;
 }
 
+void Scene::init()
+{
+	emitter = new Emitter;
+	emitter->init(1);
+}
+void Scene::cleanUp()
+{
+	emitter->cleanUp();
+	delete emitter;
+	emitter = nullptr;
+}
 
 Scene::~Scene()
 {
@@ -15,16 +26,23 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
+	emitter->update(dt);
 }
 
 void Scene::handleInput()
 {
+	if (input->isButtonDown(sf::Mouse::Left))
+	{
+		sf::Vector2f mousePos = { (float)input->getMouseX(), (float)input->getMouseY() };
+		emitter->setLocation(mousePos);
+	}
 }
 
 void Scene::render()
 {
 	beginRender();
 
+	emitter->render(window);
 
 	endRender();
 }
