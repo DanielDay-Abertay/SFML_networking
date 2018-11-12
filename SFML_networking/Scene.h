@@ -14,13 +14,18 @@ public:
 	void handleInput();
 	void render();
 
+	void wasdMovement();
+	void setDirection(sf::Vector2f direction);
+
 
 private:
 	void beginRender();
 	void endRender();
 	sf::RenderWindow* window;
 	Input* input;
-
+	float speed;
 	Emitter* emitter;
+
+	sf::Vector2f direction;
 };
 

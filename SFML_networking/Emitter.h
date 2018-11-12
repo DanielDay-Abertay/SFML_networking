@@ -1,6 +1,7 @@
 #pragma once
 #include "Particle.h"
 #include <vector>
+
 class Emitter
 {
 public:
@@ -13,6 +14,7 @@ public:
 	void render(sf::RenderWindow* window);
 
 	void setLocation(sf::Vector2f pos);
+	void setDirection(sf::Vector2f dir) { direction = dir; }
 
 private:
 
@@ -20,6 +22,9 @@ private:
 	sf::Texture texture;
 
 	sf::Vector2f position;
+	sf::Vector2f direction;
+
+	float speed;
 
 };
 

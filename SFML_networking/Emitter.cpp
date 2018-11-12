@@ -20,7 +20,7 @@ void Emitter::init(int amount)
 	for (int i = 0; i < amount; i++)
 	{
 		particleVec->push_back(new Particle);
-		particleVec->back()->init();
+		particleVec->back()->init(sf::Vector2f(0, 0) ,sf::Vector2f(0,0));
 		particleVec->back()->setTexture(&texture);
 		particleVec->back()->setPosition(sf::Vector2f(100.0f, 100.0f));
 	}
@@ -43,8 +43,19 @@ void Emitter::update(float dt)
 {
 	for (auto par : *particleVec)
 	{
+		if (par->offScreen())
+		{
+			par->reset(); //need to implement
+			break;
+		}
+		else
+		{
+			par->setDirection(direction);
+			par->update(dt);
+		}
+
 		
-		par->setPosition(position);
+		
 	}
 
 }
