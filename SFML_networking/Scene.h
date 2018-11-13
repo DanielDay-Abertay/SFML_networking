@@ -3,6 +3,7 @@
 #include <windows.h>
 #include "Input.h"
 #include "Emitter.h"
+#include <vector>
 class Scene
 {
 public:
@@ -24,8 +25,8 @@ private:
 	sf::RenderWindow* window;
 	Input* input;
 	float speed;
-	Emitter* emitter;
-
+	std::vector<Emitter*> emitter;
+	sf::Texture texture;
 	sf::Vector2f direction;
 };
 

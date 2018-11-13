@@ -8,7 +8,7 @@ public:
 	Emitter();
 	~Emitter();
 
-	void init(int amount);
+	void init(int amount, sf::Vector2f pos, sf::Texture* texture);
 	void cleanUp();
 	void update(float dt);
 	void render(sf::RenderWindow* window);

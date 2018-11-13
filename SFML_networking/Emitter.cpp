@@ -11,18 +11,19 @@ Emitter::~Emitter()
 {
 }
 
-void Emitter::init(int amount)
+void Emitter::init(int amount, sf::Vector2f pos, sf::Texture* texture)
 {
 
 	particleVec = new std::vector<Particle*>;
-	texture.loadFromFile("gfx/explosion00.png");
+	
+	position = pos;
 
 	for (int i = 0; i < amount; i++)
 	{
 		particleVec->push_back(new Particle);
-		particleVec->back()->init(sf::Vector2f(0, 0) ,sf::Vector2f(0,0));
-		particleVec->back()->setTexture(&texture);
-		particleVec->back()->setPosition(sf::Vector2f(100.0f, 100.0f));
+		particleVec->back()->init(position, sf::Vector2f(0,0));
+		particleVec->back()->setTexture(texture);
+		//particleVec->back()->setPosition(sf::Vector2f(100.0f, 100.0f));
 	}
 
 
@@ -45,7 +46,7 @@ void Emitter::update(float dt)
 	{
 		if (par->offScreen())
 		{
-			par->reset(); //need to implement
+			par->init(position, sf::Vector2f(0, 0)); //need to implement
 			break;
 		}
 		else

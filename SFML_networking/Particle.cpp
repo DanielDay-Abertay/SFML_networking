@@ -13,22 +13,53 @@ Particle::~Particle()
 
 void Particle::init(sf::Vector2f pos, sf::Vector2f dir)
 {
+	float randX = rand() % 200;
+	if (randX < 100)
+	{
+		randX *= -1;
+	}
+	else
+	{
+		randX -= 100;
+	}
+	float randY = rand() % 1000;
+	if (randY < 500)
+	{
+		randY *= -1;
+	}
+	else
+	{
+		randY -= 500;
+	}
+	setVelocity(randX, randY);
+
+
 	setSize(sf::Vector2f(50, 50));
 	setPosition(pos);
-	setVelocity(dir);
+	
 	setAcceleration(0, 0);
 	setAlive(true);
 	speed = 100;
+	setMass(1);
 
 
 }
 
 void Particle::update(float dt)
 {
-	sf::Vector2f temp = direction * speed;
-	setVelocity(temp);
-	move(getVelocity() * dt);
+	sf::Vector2f temp{ 0, 500 };
+	applyForce(temp);
+
+	sf::Vector2f velocityTemp = getVelocity();
+	sf::Vector2f accelerationTemp = getAcceleration();
+	//use temp variables to calculate new velocity
+	velocityTemp += accelerationTemp * dt;
+	setVelocity(velocityTemp);
+
+
 	
+	move(getVelocity() * dt);
+	acceleration *= 0.f;
 	//std::cout << "X: " << getPosition().x << " Y: " << getPosition().y << std::endl;
 
 }

@@ -14,6 +14,7 @@ public:
 	bool offScreen();
 	void reset();
 
+
 	float speed;
 	sf::Vector2f direction;
 };

@@ -12,14 +12,21 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in)
 
 void Scene::init()
 {
-	emitter = new Emitter;
-	emitter->init(1);
+	texture.loadFromFile("gfx/explosion00.png");
+	emitter.push_back(new Emitter);
+	
+	emitter.back()->init(10, sf::Vector2f(0,0), &texture);
 }
 void Scene::cleanUp()
 {
-	emitter->cleanUp();
-	delete emitter;
-	emitter = nullptr;
+
+	for (auto it : emitter)
+	{
+		it->cleanUp();
+		delete it;
+		it = nullptr;
+	}
+	
 }
 
 Scene::~Scene()
@@ -28,16 +35,22 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
+	for (auto it : emitter)
+	{
+		it->update(dt);
+	}
 	
-	emitter->update(dt);
 }
 
 void Scene::handleInput()
 {
 	if (input->isButtonDown(sf::Mouse::Left))
 	{
+		input->setMouseUp(sf::Keyboard::Left);
 		sf::Vector2f mousePos = { (float)input->getMouseX(), (float)input->getMouseY() };
-		emitter->setLocation(mousePos);
+		emitter.push_back(new Emitter);
+		emitter.back()->init(10, mousePos, &texture);
+		
 	}
 	wasdMovement();
 	
@@ -48,7 +61,10 @@ void Scene::render()
 {
 	beginRender();
 
-	emitter->render(window);
+	for (auto it : emitter)
+	{
+		it->render(window);
+	}
 
 	endRender();
 }
@@ -96,5 +112,5 @@ void Scene::wasdMovement()
 void Scene::setDirection(sf::Vector2f direction)
 {
 	
-	emitter->setDirection(direction);
+	//emitter.back()->setDirection(direction);
 }
