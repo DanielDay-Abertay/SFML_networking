@@ -7,26 +7,33 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in)
 	window = hwnd;
 	input = in;
 
-	speed = 1000;
+	speed = 100;
 }
 
 void Scene::init()
 {
 	texture.loadFromFile("gfx/explosion00.png");
-	emitter.push_back(new Emitter);
+	/*emitter.push_back(new Emitter);
 	
-	emitter.back()->init(10, sf::Vector2f(0,0), &texture);
+	emitter.back()->init(10, sf::Vector2f(0,0), &texture);*/
+
+	emitter = new Emitter;
+	emitter->init(200, sf::Vector2f(100, 100), &texture);
+
 }
 void Scene::cleanUp()
 {
 
-	for (auto it : emitter)
+	/*for (auto it : emitter)
 	{
 		it->cleanUp();
 		delete it;
 		it = nullptr;
-	}
+	}*/
 	
+	emitter->cleanUp();
+	delete emitter;
+	emitter = nullptr;
 }
 
 Scene::~Scene()
@@ -35,36 +42,43 @@ Scene::~Scene()
 
 void Scene::update(float dt)
 {
-	for (auto it : emitter)
+	/*for (auto it : emitter)
 	{
 		it->update(dt);
-	}
+	}*/
+	setDirection(direction*speed*dt);
+	emitter->update(dt, mousePos);
 	
 }
 
-void Scene::handleInput()
+void Scene::handleInput(float dt)
 {
-	if (input->isButtonDown(sf::Mouse::Left))
+
+	mousePos = sf::Vector2f(input->getMouseX(), input->getMouseY());
+	/*if (input->isButtonDown(sf::Mouse::Left))
 	{
 		input->setMouseUp(sf::Keyboard::Left);
 		sf::Vector2f mousePos = { (float)input->getMouseX(), (float)input->getMouseY() };
 		emitter.push_back(new Emitter);
 		emitter.back()->init(10, mousePos, &texture);
 		
-	}
+	}*/
 	wasdMovement();
 	
-
+	
+	
 }
 
 void Scene::render()
 {
 	beginRender();
 
-	for (auto it : emitter)
+	/*for (auto it : emitter)
 	{
 		it->render(window);
-	}
+	}*/
+
+	emitter->render(window);
 
 	endRender();
 }
@@ -80,7 +94,7 @@ void Scene::endRender()
 	window->display();
 }
 
-void Scene::wasdMovement()
+bool Scene::wasdMovement()
 {
 	
 	if (input->isKeyDown(sf::Keyboard::W))
@@ -106,11 +120,16 @@ void Scene::wasdMovement()
 	else
 		direction.x = 0;
 
-	setDirection(direction);
+	if (direction == sf::Vector2f(0, 0))
+	{
+		return false;
+	}
+	return true;
+	//setDirection(direction);
 }
 
 void Scene::setDirection(sf::Vector2f direction)
 {
 	
-	//emitter.back()->setDirection(direction);
+	emitter->setLocation(direction);
 }

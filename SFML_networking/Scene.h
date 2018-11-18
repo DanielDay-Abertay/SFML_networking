@@ -12,10 +12,10 @@ public:
 	void init();
 	void cleanUp();
 	void update(float dt);
-	void handleInput();
+	void handleInput(float dt);
 	void render();
 
-	void wasdMovement();
+	bool wasdMovement();
 	void setDirection(sf::Vector2f direction);
 
 
@@ -25,8 +25,11 @@ private:
 	sf::RenderWindow* window;
 	Input* input;
 	float speed;
-	std::vector<Emitter*> emitter;
+	Emitter* emitter;
+	// std::vector<Emitter*> emitter;
 	sf::Texture texture;
 	sf::Vector2f direction;
+	sf::Vector2f mousePos;
+	sf::Vector2f movement;
 };
 

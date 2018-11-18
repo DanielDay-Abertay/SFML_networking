@@ -21,7 +21,7 @@ void Emitter::init(int amount, sf::Vector2f pos, sf::Texture* texture)
 	for (int i = 0; i < amount; i++)
 	{
 		particleVec->push_back(new Particle);
-		particleVec->back()->init(position, sf::Vector2f(0,0));
+		particleVec->back()->init(position,sf::Vector2f(0,0));
 		particleVec->back()->setTexture(texture);
 		//particleVec->back()->setPosition(sf::Vector2f(100.0f, 100.0f));
 	}
@@ -40,18 +40,19 @@ void Emitter::cleanUp()
 	particleVec = nullptr;
 }
 
-void Emitter::update(float dt)
+void Emitter::update(float dt, sf::Vector2f mousePos)
 {
 	for (auto par : *particleVec)
 	{
 		if (par->offScreen())
 		{
-			par->init(position, sf::Vector2f(0, 0)); //need to implement
-			break;
+
+			par->init(position, mousePos); //need to implement
+			
 		}
 		else
 		{
-			par->setDirection(direction);
+			//par->setDirection(direction);
 			par->update(dt);
 		}
 
@@ -71,5 +72,5 @@ void Emitter::render(sf::RenderWindow* window)
 
 void Emitter::setLocation(sf::Vector2f pos)
 {
-	position = pos;
+	position += pos;
 }

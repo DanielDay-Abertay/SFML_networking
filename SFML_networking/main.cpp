@@ -62,7 +62,7 @@ int main()
 		if (!close) {
 			deltaTime = clock.restart().asSeconds();
 
-			scene.handleInput();
+			scene.handleInput(deltaTime);
 			scene.update(deltaTime);
 			scene.render();
 		}

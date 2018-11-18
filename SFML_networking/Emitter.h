@@ -10,11 +10,11 @@ public:
 
 	void init(int amount, sf::Vector2f pos, sf::Texture* texture);
 	void cleanUp();
-	void update(float dt);
+	void update(float dt, sf::Vector2f mousePos);
 	void render(sf::RenderWindow* window);
 
 	void setLocation(sf::Vector2f pos);
-	void setDirection(sf::Vector2f dir) { direction = dir; }
+	sf::Vector2f getLocation() { return position; };
 
 private:
 

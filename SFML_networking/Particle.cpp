@@ -11,8 +11,10 @@ Particle::~Particle()
 {
 }
 
-void Particle::init(sf::Vector2f pos, sf::Vector2f dir)
+void Particle::init(sf::Vector2f pos, sf::Vector2f mousePos)
 {
+	sf::Vector2f vel = mousePos - pos;
+
 	float randX = rand() % 200;
 	if (randX < 100)
 	{
@@ -35,14 +37,14 @@ void Particle::init(sf::Vector2f pos, sf::Vector2f dir)
 
 
 	setSize(sf::Vector2f(50, 50));
-	setPosition(pos);
+	
 	
 	setAcceleration(0, 0);
 	setAlive(true);
 	speed = 100;
 	setMass(1);
 
-
+	setPosition(pos);
 }
 
 void Particle::update(float dt)
