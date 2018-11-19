@@ -2,13 +2,14 @@
 #include <SFML\Network.hpp>
 #include "Scene.h"
 #include <iostream>
+#include "NetworkHandler.h"
 
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
 
-	sf::UdpSocket socket;
+	
 
 	Input input;
 
@@ -16,18 +17,12 @@ int main()
 	sf::Clock newclock;
 	float deltaTime;
 	bool close = false;
+	NetworkHandler network;
 
 	
 
-
-	if (socket.bind(4444) != sf::Socket::Done)
-	{
-		std::cout << "faield" << std::endl;
-	}
-	else
-	{
-		std::cout << "sucsess" << std::endl;
-	}
+	network.connect();
+	network.receiveData();
 	Scene scene(&window, &input);
 	scene.init();
 
