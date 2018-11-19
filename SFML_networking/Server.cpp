@@ -9,6 +9,17 @@ Server::~Server()
 {
 }
 
+
+void Server::udpBind()
+{
+	if (socket.bind(4444) != sf::Socket::Done)
+	{
+		cout << "failed to bind" << endl;
+	}
+
+
+
+}
 void Server::listener()
 {
 
