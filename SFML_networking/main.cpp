@@ -1,4 +1,5 @@
 #include <SFML\OpenGL.hpp>
+#include <SFML\Network.hpp>
 #include "Scene.h"
 #include <iostream>
 
@@ -7,7 +8,7 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(1920, 1080), "SFML works!");
 
-	
+	sf::UdpSocket socket;
 
 	Input input;
 
@@ -16,10 +17,17 @@ int main()
 	float deltaTime;
 	bool close = false;
 
+	
 
 
-
-
+	if (socket.bind(4444) != sf::Socket::Done)
+	{
+		std::cout << "faield" << std::endl;
+	}
+	else
+	{
+		std::cout << "sucsess" << std::endl;
+	}
 	Scene scene(&window, &input);
 	scene.init();
 
