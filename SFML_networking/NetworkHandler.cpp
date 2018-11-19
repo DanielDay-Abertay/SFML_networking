@@ -4,6 +4,7 @@
 
 NetworkHandler::NetworkHandler()
 {
+	port = 4444;
 }
 
 
@@ -11,37 +12,82 @@ NetworkHandler::~NetworkHandler()
 {
 }
 
-void NetworkHandler::connect()
+bool NetworkHandler::connect()
 {
-	sf::Socket::Status status = socket.connect("172.16.19.158", 4444);
-	if (status != sf::Socket::Done)
+	// Ask for the server address
+	do
 	{
-		std::cout << "failled to connct" << std::endl;
+		std::cout << "Type the address or name of the server to connect to: ";
+		std::cin >> server;
+	} while (server == sf::IpAddress::None);
+
+
+	// Send a message to the server
+	const char out[] = "Hi, I'm a client";
+	if (socket.send(out, sizeof(out), server, port) != sf::Socket::Done)
+	{
+		cout << "failed to send to server" << endl;
+		return false;
+	}		
+	std::cout << "Message sent to the server: \"" << out << "\"" << std::endl;
+
+	// Receive an answer from anyone (but most likely from the server)
+	char in[128];
+	std::size_t received;
+	sf::IpAddress sender;
+	
+	if (socket.receive(in, sizeof(in), received, sender, senderPort) != sf::Socket::Done)
+	{
+		cout << "failed to recieve" << endl;
+		return false;
+	}		
+	std::cout << "Message received from " << sender << ": \"" << in << "\"" << std::endl;
+
+
+	
+	if (socket.receive(&timeStamp, sizeof(timeStamp), received, sender, senderPort) != sf::Socket::Done)
+	{
+		std::cout << "failed to recive" << std::endl;
 	}
+	else
+	{
+		std::cout << "Message received from " << sender << ": \"" << timeStamp << "\"" << std::endl;
+	}
+		
+	
+	
 }
 
-void NetworkHandler::sendData()
+void NetworkHandler::sendData(void* data)
 {
+	if (socket.send(data, sizeof(data), server, port) != sf::Socket::Done)
+	{
 
-
+	}
+	
 
 }
+////void NetworkHandler::sendData(sf::Packet* data)
+////{
+////	if (socket.send(data, sizeof(data), server, port) != sf::Socket::Done)
+////	{
+////
+////	}
+////
+////}
 
 void NetworkHandler::receiveData()
 {
-	char data[100];
-	std::size_t received;
+	
 
-	// TCP socket:
-	if (socket.receive(data, 100, received) != sf::Socket::Done)
+
+}
+
+void NetworkHandler::confirmTimeStamp()
+{
+	if (socket.send(&timeStamp, sizeof(timeStamp), server, port) != sf::Socket::Done)
 	{
-		// error...
+		cout << "Failed to send time stamp" << endl;
 	}
-	std::cout << "Received " << received << " bytes" << std::endl;
-	for (int i = 0; i < received; i++)
-	{
-		std::cout << data[i];
-	}
-	std::cout<<std::endl;
 
 }

@@ -20,15 +20,21 @@ int main()
 	NetworkHandler network;
 
 	
+	if (!network.connect())
+	{
+		cout << "fail" << endl;
+	}
+	network.confirmTimeStamp();
 
-	network.connect();
-	network.receiveData();
+	sf::Int32 timeStamp = network.getTimeStamp();
+	
 	Scene scene(&window, &input);
 	scene.init();
 
 
 	while (window.isOpen())
 	{
+		//timeCopy = timeStamp + clock.getElapsedTime().asMilliseconds();
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -73,7 +79,7 @@ int main()
 		{
 			scene.cleanUp();
 		}
-
-
+		
+		//time
 	}
 }

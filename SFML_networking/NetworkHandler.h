@@ -1,20 +1,25 @@
 #pragma once
 #include <iostream>
 #include <SFML\Network.hpp>
+using namespace std;
 class NetworkHandler
 {
 public:
 	NetworkHandler();
 	~NetworkHandler();
 
-	void connect();
-	void sendData();
+	bool connect();
+	void sendData(void* data);
+	void sendData(sf::Packet* data);
 	void receiveData();
+	void confirmTimeStamp();
+	sf::Int32 getTimeStamp() { return timeStamp; }
 
 protected:
-
-	sf::TcpSocket socket;
-
-	
+	sf::IpAddress server;
+	sf::UdpSocket socket;
+	unsigned short port;
+	unsigned short senderPort;
+	sf::Int32 timeStamp;
 };
 
