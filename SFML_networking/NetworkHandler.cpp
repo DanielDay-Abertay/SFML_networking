@@ -13,7 +13,7 @@ NetworkHandler::~NetworkHandler()
 
 void NetworkHandler::connect()
 {
-	sf::Socket::Status status = socket.connect("192.168.0.5", 4444);
+	sf::Socket::Status status = socket.connect("172.16.19.158", 4444);
 	if (status != sf::Socket::Done)
 	{
 		std::cout << "failled to connct" << std::endl;
@@ -38,5 +38,10 @@ void NetworkHandler::receiveData()
 		// error...
 	}
 	std::cout << "Received " << received << " bytes" << std::endl;
+	for (int i = 0; i < received; i++)
+	{
+		std::cout << data[i];
+	}
+	std::cout<<std::endl;
 
 }
