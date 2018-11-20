@@ -23,36 +23,86 @@ bool NetworkHandler::connect()
 
 
 	// Send a message to the server
-	const char out[] = "Hi, I'm a client";
-	if (socket.send(out, sizeof(out), server, port) != sf::Socket::Done)
+	info.connectRequest = true;
+	if (!pack.fillPacket(info, sentPacket))
 	{
-		cout << "failed to send to server" << endl;
+		cout << "failed" << endl;
+		info.connectRequest = false;
 		return false;
-	}		
-	std::cout << "Message sent to the server: \"" << out << "\"" << std::endl;
-
-	// Receive an answer from anyone (but most likely from the server)
-	char in[128];
-	std::size_t received;
-	sf::IpAddress sender;
-	
-	if (socket.receive(in, sizeof(in), received, sender, senderPort) != sf::Socket::Done)
-	{
-		cout << "failed to recieve" << endl;
-		return false;
-	}		
-	std::cout << "Message received from " << sender << ": \"" << in << "\"" << std::endl;
-
-
-	
-	if (socket.receive(&timeStamp, sizeof(timeStamp), received, sender, senderPort) != sf::Socket::Done)
-	{
-		std::cout << "failed to recive" << std::endl;
 	}
-	else
+
+	cout << "request packed" << endl;
+	if (!sendPacket(sentPacket))
 	{
-		std::cout << "Message received from " << sender << ": \"" << timeStamp << "\"" << std::endl;
+		cout << "Failed to send" << endl;
+
 	}
+	cout << "request sent" << endl;
+
+	if (!receivePacket())
+	{
+		cout << "Failed to receive" << endl;
+	}
+	
+	cout << "connection aquired" << endl;
+	cout << "wainting for time stamp" << endl;
+
+
+
+	if (!receivePacket())
+	{
+		cout << "Failed to receive" << endl;
+	}
+	cout << "timeTamp = " << info.timeStamp << endl;
+
+
+	if (info.timeSent)
+	{
+		if (!pack.fillPacket(info, sentPacket))
+		{
+			cout << "failed" << endl;
+			return false;
+		}
+
+		cout << "request packed" << endl;
+		if (!sendPacket(sentPacket))
+		{
+			cout << "Failed to send" << endl;
+
+		}
+	}
+
+
+
+	//if (socket.send(out, sizeof(out), server, port) != sf::Socket::Done)
+	//{
+	//	cout << "failed to send to server" << endl;
+	//	return false;
+	//}		
+	//std::cout << "Message sent to the server: \"" << out << "\"" << std::endl;
+
+	//// Receive an answer from anyone (but most likely from the server)
+	//char in[128];
+	//std::size_t received;
+	//sf::IpAddress sender;
+	//
+	//if (socket.receive(in, sizeof(in), received, sender, senderPort) != sf::Socket::Done)
+	//{
+	//	cout << "failed to recieve" << endl;
+	//	return false;
+	//}		
+	//std::cout << "Message received from " << sender << ": \"" << in << "\"" << std::endl;
+
+
+	//
+	//if (socket.receive(&timeStamp, sizeof(timeStamp), received, sender, senderPort) != sf::Socket::Done)
+	//{
+	//	std::cout << "failed to recive" << std::endl;
+	//}
+	//else
+	//{
+	//	std::cout << "Message received from " << sender << ": \"" << timeStamp << "\"" << std::endl;
+	//}
 		
 	
 	
@@ -67,19 +117,20 @@ void NetworkHandler::sendData(void* data)
 	
 
 }
-////void NetworkHandler::sendData(sf::Packet* data)
-////{
-////	if (socket.send(data, sizeof(data), server, port) != sf::Socket::Done)
-////	{
-////
-////	}
-////
-////}
 
-void NetworkHandler::receiveData()
+
+bool NetworkHandler::receivePacket()
 {
-	
-
+	receivedPacket.clear();
+	if (socket.receive(receivedPacket, server, port) != sf::Socket::Done)
+	{
+		return false;
+	}
+	if (!pack.checkPacket(receivedPacket, &info))
+	{
+		return false;
+	}
+	return true;
 
 }
 
@@ -89,5 +140,16 @@ void NetworkHandler::confirmTimeStamp()
 	{
 		cout << "Failed to send time stamp" << endl;
 	}
+
+}
+
+bool NetworkHandler::sendPacket(sf::Packet packet)
+{
+
+	if (socket.send(packet, server, port) != sf::Socket::Done)
+	{
+		return false;
+	}
+	return true;
 
 }
