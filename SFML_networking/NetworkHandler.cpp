@@ -12,7 +12,7 @@ NetworkHandler::~NetworkHandler()
 {
 }
 
-bool NetworkHandler::connect()
+bool NetworkHandler::connect(sf::Clock *clock)
 {
 	// Ask for the server address
 	do
@@ -43,7 +43,7 @@ bool NetworkHandler::connect()
 	{
 		cout << "Failed to receive" << endl;
 	}
-	
+	cout << "your Id is " << info.ID << endl;
 	cout << "connection aquired" << endl;
 	cout << "wainting for time stamp" << endl;
 
@@ -54,9 +54,10 @@ bool NetworkHandler::connect()
 		cout << "Failed to receive" << endl;
 	}
 	cout << "timeTamp = " << info.timeStamp << endl;
+	clock->restart();
+	info.timeStamp += clock->getElapsedTime().asMilliseconds();
 
-
-	//if the tiem stamp has been recived it will send it back to confurm
+	//if the time stamp has been recived it will send it back to confurm
 	if (info.timeSent)
 	{
 		if (!pack.fillPacket(info, sentPacket))
@@ -72,56 +73,15 @@ bool NetworkHandler::connect()
 			return false;
 
 		}
+		//cout << "sent time stamp at " << info.timeStamp << endl;
 		timeStamp = info.timeStamp;
 
 	}
 
 
 
-	//if (socket.send(out, sizeof(out), server, port) != sf::Socket::Done)
-	//{
-	//	cout << "failed to send to server" << endl;
-	//	return false;
-	//}		
-	//std::cout << "Message sent to the server: \"" << out << "\"" << std::endl;
-
-	//// Receive an answer from anyone (but most likely from the server)
-	//char in[128];
-	//std::size_t received;
-	//sf::IpAddress sender;
-	//
-	//if (socket.receive(in, sizeof(in), received, sender, senderPort) != sf::Socket::Done)
-	//{
-	//	cout << "failed to recieve" << endl;
-	//	return false;
-	//}		
-	//std::cout << "Message received from " << sender << ": \"" << in << "\"" << std::endl;
-
-
-	//
-	//if (socket.receive(&timeStamp, sizeof(timeStamp), received, sender, senderPort) != sf::Socket::Done)
-	//{
-	//	std::cout << "failed to recive" << std::endl;
-	//}
-	//else
-	//{
-	//	std::cout << "Message received from " << sender << ": \"" << timeStamp << "\"" << std::endl;
-	//}
-		
-	
 	
 }
-
-void NetworkHandler::sendData(void* data)
-{
-	if (socket.send(data, sizeof(data), server, port) != sf::Socket::Done)
-	{
-
-	}
-	
-
-}
-
 
 bool NetworkHandler::receivePacket()
 {

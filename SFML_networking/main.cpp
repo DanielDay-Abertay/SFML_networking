@@ -20,13 +20,14 @@ int main()
 	NetworkHandler network;
 
 	
-	if (!network.connect())
+	if (!network.connect(&newclock))
 	{
 		cout << "fail" << endl;
 	}
 	network.confirmTimeStamp();
 
 	sf::Int32 timeStamp = network.getTimeStamp();
+	//newclock.getElapsedTime.restart();
 	
 	Scene scene(&window, &input);
 	scene.init();
@@ -34,7 +35,7 @@ int main()
 
 	while (window.isOpen())
 	{
-		//timeCopy = timeStamp + clock.getElapsedTime().asMilliseconds();
+		
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -69,10 +70,10 @@ int main()
 			}
 		}
 		if (!close) {
-			deltaTime = clock.restart().asSeconds();
-
+			timeStamp += clock.getElapsedTime().asMilliseconds();
+			deltaTime = clock.restart().asSeconds();			
 			scene.handleInput(deltaTime);
-			scene.update(deltaTime, &network);
+			scene.update(deltaTime, &network, timeStamp);
 			scene.render();
 		}
 		else

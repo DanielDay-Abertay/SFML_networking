@@ -14,6 +14,7 @@ struct playerInfo
 	sf::Uint32 timeStamp = NULL;
 	bool timeOkay = false;
 	bool timeSent = false;
+	int ID = NULL;
 };
 
 struct playerPos
@@ -21,6 +22,7 @@ struct playerPos
 	sf::Uint32 timeStamp = NULL;
 	float xPos;
 	float yPos;
+	int ID;
 };
 class NetworkHandler
 {
@@ -28,10 +30,7 @@ public:
 	NetworkHandler();
 	~NetworkHandler();
 
-	bool connect();
-	void sendData(void* data);
-	void sendData(sf::Packet* data);
-	void receiveData();
+	bool connect(sf::Clock *clock);
 	void confirmTimeStamp();
 	sf::Int32 getTimeStamp() { return timeStamp; }
 

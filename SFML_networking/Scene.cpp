@@ -20,7 +20,7 @@ void Scene::init()
 	emitter.back()->init(10, sf::Vector2f(0,0), &texture);*/
 
 	emitter = new Emitter;
-	emitter->init(200, sf::Vector2f(100, 100), &texture);
+	emitter->init(10, sf::Vector2f(100, 100), &texture);
 
 }
 void Scene::cleanUp()
@@ -42,7 +42,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::update(float dt, NetworkHandler* network)
+void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 {
 	/*for (auto it : emitter)
 	{
@@ -53,13 +53,17 @@ void Scene::update(float dt, NetworkHandler* network)
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
-	position.timeStamp = NULL;
+	position.timeStamp = time;
 //	cout << packet.getDataSize() << endl;;
 
 	if (numberOfTimes == 10)
 	{
-		customPacket.fillPacket(position, packet);
-		network->sendPacket(packet);
+		if (move)
+		{
+			customPacket.fillPacket(position, packet);
+			network->sendPacket(packet);
+		}
+		
 		numberOfTimes = 0;
 	}
 	
@@ -80,7 +84,13 @@ void Scene::handleInput(float dt)
 		emitter.back()->init(10, mousePos, &texture);
 		
 	}*/
-	wasdMovement();
+	if (wasdMovement())
+	{
+		move = true;
+	}
+	else
+		move = false;
+	
 	
 	
 	

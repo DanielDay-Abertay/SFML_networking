@@ -13,7 +13,7 @@ public:
 	~Scene();
 	void init();
 	void cleanUp();
-	void update(float dt, NetworkHandler* network);
+	void update(float dt, NetworkHandler* network, sf::Uint32 time);
 	void handleInput(float dt);
 	void render();
 
@@ -39,5 +39,7 @@ private:
 	CustomPacket customPacket;
 	sf::Packet packet;
 	int numberOfTimes;
+
+	bool move;
 };
 

@@ -45,6 +45,7 @@ void Particle::init(sf::Vector2f pos, sf::Vector2f mousePos)
 	setMass(1);
 
 	setPosition(pos);
+//	setFillColor(sf::Color(1, 0, 0));
 }
 
 void Particle::update(float dt)
