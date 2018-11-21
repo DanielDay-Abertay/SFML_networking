@@ -69,8 +69,11 @@ bool NetworkHandler::connect()
 		if (!sendPacket(sentPacket))
 		{
 			cout << "Failed to send" << endl;
+			return false;
 
 		}
+		timeStamp = info.timeStamp;
+
 	}
 
 

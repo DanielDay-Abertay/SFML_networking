@@ -54,5 +54,7 @@ protected:
 
 	playerInfo info;
 	playerPos posInfo;
+
+	sf::Uint32 time;
 };
 
