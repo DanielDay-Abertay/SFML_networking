@@ -30,7 +30,7 @@ bool NetworkHandler::connect()
 		info.connectRequest = false;
 		return false;
 	}
-
+	cout << sentPacket.getDataSize() << endl;
 	cout << "request packed" << endl;
 	if (!sendPacket(sentPacket))
 	{
@@ -48,7 +48,7 @@ bool NetworkHandler::connect()
 	cout << "wainting for time stamp" << endl;
 
 
-
+	//waiting to be sent a time stamp
 	if (!receivePacket())
 	{
 		cout << "Failed to receive" << endl;
@@ -56,6 +56,7 @@ bool NetworkHandler::connect()
 	cout << "timeTamp = " << info.timeStamp << endl;
 
 
+	//if the tiem stamp has been recived it will send it back to confurm
 	if (info.timeSent)
 	{
 		if (!pack.fillPacket(info, sentPacket))

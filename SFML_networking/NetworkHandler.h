@@ -15,6 +15,13 @@ struct playerInfo
 	bool timeOkay = false;
 	bool timeSent = false;
 };
+
+struct playerPos
+{
+	sf::Uint32 timeStamp = NULL;
+	float xPos;
+	float yPos;
+};
 class NetworkHandler
 {
 public:
@@ -31,6 +38,8 @@ public:
 	bool sendPacket(sf::Packet packet);
 	bool receivePacket();
 
+
+
 protected:
 	sf::IpAddress server;
 	sf::UdpSocket socket;
@@ -44,5 +53,6 @@ protected:
 	CustomPacket pack;
 
 	playerInfo info;
+	playerPos posInfo;
 };
 

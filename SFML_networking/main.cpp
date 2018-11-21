@@ -72,7 +72,7 @@ int main()
 			deltaTime = clock.restart().asSeconds();
 
 			scene.handleInput(deltaTime);
-			scene.update(deltaTime);
+			scene.update(deltaTime, &network);
 			scene.render();
 		}
 		else

@@ -8,6 +8,8 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in)
 	input = in;
 
 	speed = 100;
+
+	numberOfTimes = 0;
 }
 
 void Scene::init()
@@ -40,7 +42,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::update(float dt)
+void Scene::update(float dt, NetworkHandler* network)
 {
 	/*for (auto it : emitter)
 	{
@@ -48,6 +50,21 @@ void Scene::update(float dt)
 	}*/
 	setDirection(direction*speed*dt);
 	emitter->update(dt, mousePos);
+
+	position.xPos = emitter->getLocation().x;
+	position.yPos = emitter->getLocation().y;
+	position.timeStamp = NULL;
+//	cout << packet.getDataSize() << endl;;
+
+	if (numberOfTimes == 10)
+	{
+		customPacket.fillPacket(position, packet);
+		network->sendPacket(packet);
+		numberOfTimes = 0;
+	}
+	
+
+	numberOfTimes++;
 	
 }
 
