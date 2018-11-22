@@ -74,6 +74,7 @@ int main()
 			deltaTime = clock.restart().asSeconds();			
 			scene.handleInput(deltaTime);
 			scene.update(deltaTime, &network, timeStamp);
+			network.update(&newclock);
 			scene.render();
 		}
 		else

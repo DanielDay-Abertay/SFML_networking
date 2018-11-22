@@ -29,7 +29,10 @@ bool CustomPacket::fillPacket(playerPos &pos, sf::Packet& packet)
 	return false;
 }
 
-bool CustomPacket::checkPacket(sf::Packet & packet, playerInfo* info)
+
+
+//player info check
+bool CustomPacket::checkPacket(sf::Packet &packet, playerInfo *info)
 {
 	if (packet >> info->connectRequest >> info->connectAccepted >> info->timeStamp >> info->timeOkay >> info->timeSent >> info->ID)
 	{
@@ -37,13 +40,28 @@ bool CustomPacket::checkPacket(sf::Packet & packet, playerInfo* info)
 	}
 	return false;
 }
-bool CustomPacket::checkPacket(sf::Packet & packet, playerPos* pos)
+bool CustomPacket::checkPacket(sf::Packet &packet, playerPos *pos)
 {
 	if (packet >> pos->timeStamp >> pos->xPos >> pos->yPos >> pos->ID)
 	{
 		return true;
 	}
 	return false;
+}
+//network player check
+bool CustomPacket::checkPacket(sf::Packet &packet, otherPlayerInfo *networkPlayers)
+{
+	networkPlayers->networkPlayerPos.clear();
+	sf::Uint32 size;
+	packet >> size;
+	for (sf::Uint32 i = 0; i < size; ++i)
+	{
+		playerPos item;
+		packet >> item;
+		networkPlayers->networkPlayerPos.push_back(item);
+	}
+	return true;
+	
 }
 
 
@@ -57,7 +75,7 @@ sf::Packet& operator >>(sf::Packet& packet, playerInfo& info)
 	return packet >> info.connectRequest >> info.connectAccepted >> info.timeStamp >> info.timeOkay >> info.timeSent >> info.ID;
 }
 
-
+//player position check
 sf::Packet& operator <<(sf::Packet& packet, const playerPos& pos)
 {
 	return packet << pos.timeStamp << pos.xPos << pos.yPos << pos.ID;
@@ -66,4 +84,19 @@ sf::Packet& operator <<(sf::Packet& packet, const playerPos& pos)
 sf::Packet& operator >> (sf::Packet& packet, playerPos& pos)
 {
 	return packet >> pos.timeStamp >> pos.xPos >> pos.yPos >> pos.ID;
+}
+
+//sf::Packet& operator <<(sf::Packet& packet, const otherPlayerInfo& networkPlayers)
+//{
+//	return packet << networkPlayers.networkPlayerPos << networkPlayers.time;
+//}
+
+//sf::Packet& operator >> (sf::Packet& packet, otherPlayerInfo& networkPlayers)
+//{
+//	return packet >> pos.timeStamp >> pos.xPos >> pos.yPos >> pos.ID;
+//}
+
+sf::Packet& operator >> (sf::Packet& packet, otherPlayerInfo& other) {
+	packet >> other.networkPlayerPos;
+	return packet;
 }

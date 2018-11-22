@@ -90,11 +90,15 @@ bool NetworkHandler::receivePacket()
 	{
 		return false;
 	}
-	if (!pack.checkPacket(receivedPacket, &info))
+	if (pack.checkPacket(receivedPacket, &info))
 	{
-		return false;
+		return true;
 	}
-	return true;
+	if (pack.checkPacket(receivePacket, &other))
+	{
+		return true;
+	}
+	return false;
 
 }
 
@@ -115,5 +119,24 @@ bool NetworkHandler::sendPacket(sf::Packet packet)
 		return false;
 	}
 	return true;
+
+}
+
+void NetworkHandler::update(sf::Clock *clock)
+{
+	timeStamp = info.timeStamp + clock->getElapsedTime().asMilliseconds();
+
+	if (!receivePacket())
+	{
+		return;
+	}
+
+	for (std::list<playerPos>::const_iterator it = other.networkPlayerPos.begin(); it != other.networkPlayerPos.end(); ++it)
+	{
+		cout << it->xPos << " " << it->yPos << endl;
+	}
+
+
+
 
 }

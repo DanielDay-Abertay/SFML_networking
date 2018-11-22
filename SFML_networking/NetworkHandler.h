@@ -3,6 +3,7 @@
 #include <iostream>
 #include <SFML\Network.hpp>
 #include "CustomPacket.h"
+#include <list>
 using namespace std;
 
 
@@ -24,6 +25,11 @@ struct playerPos
 	float yPos;
 	int ID;
 };
+
+struct otherPlayerInfo
+{
+	std::list<playerPos> networkPlayerPos;
+};
 class NetworkHandler
 {
 public:
@@ -37,6 +43,7 @@ public:
 	bool sendPacket(sf::Packet packet);
 	bool receivePacket();
 
+	void update(sf::Clock *clock);
 
 
 protected:
@@ -44,7 +51,6 @@ protected:
 	sf::UdpSocket socket;
 	unsigned short port;
 	unsigned short senderPort;
-	sf::Int32 timeStamp;
 
 	sf::Packet sentPacket;
 	sf::Packet receivedPacket;
@@ -55,5 +61,9 @@ protected:
 	playerPos posInfo;
 
 	sf::Uint32 time;
+
+	sf::Uint32 timeStamp;
+
+	otherPlayerInfo other;
 };
 
