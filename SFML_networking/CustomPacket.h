@@ -1,6 +1,7 @@
 #pragma once
 #include "Struct.h"
 #include <SFML/Network.hpp>
+#include <list>
 struct playerInfo;
 struct playerPos;
 struct otherPlayerInfo;

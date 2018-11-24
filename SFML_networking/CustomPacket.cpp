@@ -52,14 +52,14 @@ bool CustomPacket::checkPacket(sf::Packet &packet, playerPos *pos)
 bool CustomPacket::checkPacket(sf::Packet &packet, otherPlayerInfo *networkPlayers)
 {
 	networkPlayers->networkPlayerPos.clear();
-	sf::Uint32 size;
-	packet >> size;
-	for (sf::Uint32 i = 0; i < size; ++i)
+	packet >> networkPlayers->size;
+	for (int i = 0; i < networkPlayers->size; ++i)
 	{
 		playerPos item;
-		packet >> item;
+		packet >> item.timeStamp >>item.xPos >> item.yPos >> item.ID;
 		networkPlayers->networkPlayerPos.push_back(item);
 	}
+	
 	return true;
 	
 }
@@ -95,8 +95,3 @@ sf::Packet& operator >> (sf::Packet& packet, playerPos& pos)
 //{
 //	return packet >> pos.timeStamp >> pos.xPos >> pos.yPos >> pos.ID;
 //}
-
-sf::Packet& operator >> (sf::Packet& packet, otherPlayerInfo& other) {
-	packet >> other.networkPlayerPos;
-	return packet;
-}

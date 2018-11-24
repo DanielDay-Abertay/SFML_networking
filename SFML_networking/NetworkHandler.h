@@ -20,6 +20,7 @@ struct playerInfo
 
 struct playerPos
 {
+
 	sf::Uint32 timeStamp = NULL;
 	float xPos;
 	float yPos;
@@ -28,6 +29,7 @@ struct playerPos
 
 struct otherPlayerInfo
 {
+	int size;
 	std::list<playerPos> networkPlayerPos;
 };
 class NetworkHandler

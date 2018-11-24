@@ -75,7 +75,7 @@ bool NetworkHandler::connect(sf::Clock *clock)
 		}
 		//cout << "sent time stamp at " << info.timeStamp << endl;
 		timeStamp = info.timeStamp;
-
+		socket.setBlocking(false);
 	}
 
 
@@ -94,7 +94,8 @@ bool NetworkHandler::receivePacket()
 	{
 		return true;
 	}
-	if (pack.checkPacket(receivePacket, &other))
+	
+	if (pack.checkPacket(receivedPacket, &other))
 	{
 		return true;
 	}
@@ -113,7 +114,7 @@ void NetworkHandler::confirmTimeStamp()
 
 bool NetworkHandler::sendPacket(sf::Packet packet)
 {
-
+	cout << server << endl;
 	if (socket.send(packet, server, port) != sf::Socket::Done)
 	{
 		return false;
