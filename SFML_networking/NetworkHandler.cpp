@@ -15,11 +15,13 @@ NetworkHandler::~NetworkHandler()
 bool NetworkHandler::connect(sf::Clock *clock)
 {
 	// Ask for the server address
+	sf::IpAddress newIp;
 	do
 	{
 		std::cout << "Type the address or name of the server to connect to: ";
-		std::cin >> server;
-	} while (server == sf::IpAddress::None);
+		std::cin >> newIp;
+		setServerIp(newIp);
+	} while (newIp == sf::IpAddress::None);
 
 
 	// Send a message to the server
@@ -32,7 +34,7 @@ bool NetworkHandler::connect(sf::Clock *clock)
 	}
 	cout << sentPacket.getDataSize() << endl;
 	cout << "request packed" << endl;
-	if (!sendPacket(sentPacket))
+	if (!sendPacket(sentPacket, getServerIp()))
 	{
 		cout << "Failed to send" << endl;
 
@@ -67,7 +69,7 @@ bool NetworkHandler::connect(sf::Clock *clock)
 		}
 
 		cout << "request packed" << endl;
-		if (!sendPacket(sentPacket))
+		if (!sendPacket(sentPacket, getServerIp()))
 		{
 			cout << "Failed to send" << endl;
 			return false;
@@ -112,10 +114,11 @@ void NetworkHandler::confirmTimeStamp()
 
 }
 
-bool NetworkHandler::sendPacket(sf::Packet packet)
+bool NetworkHandler::sendPacket(sf::Packet packet, sf::IpAddress ip)
 {
-	cout << server << endl;
-	if (socket.send(packet, server, port) != sf::Socket::Done)
+	port = 4444;
+	cout << ip << endl;
+	if (socket.send(packet, ip, port) != sf::Socket::Done)
 	{
 		return false;
 	}
@@ -140,4 +143,9 @@ void NetworkHandler::update(sf::Clock *clock)
 
 
 
+}
+
+void NetworkHandler::setServerIp(sf::IpAddress ip)
+{
+	serverIp = ip;
 }

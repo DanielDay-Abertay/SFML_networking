@@ -42,14 +42,16 @@ public:
 	void confirmTimeStamp();
 	sf::Int32 getTimeStamp() { return timeStamp; }
 
-	bool sendPacket(sf::Packet packet);
+	bool sendPacket(sf::Packet packet, sf::IpAddress ip);
 	bool receivePacket();
 
 	void update(sf::Clock *clock);
+	void setServerIp(sf::IpAddress ip);
+	sf::IpAddress getServerIp() { return serverIp; }
 
 
 protected:
-	sf::IpAddress server;
+	sf::IpAddress serverIp;
 	sf::UdpSocket socket;
 	unsigned short port;
 	unsigned short senderPort;

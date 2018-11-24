@@ -59,8 +59,8 @@ void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 	if (numberOfTimes == 10)
 	{
 		
-			customPacket.fillPacket(position, packet);
-			network->sendPacket(packet);
+		customPacket.fillPacket(position, packet);
+		network->sendPacket(packet);
 		
 		
 		numberOfTimes = 0;
