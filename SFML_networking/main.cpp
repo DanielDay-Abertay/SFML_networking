@@ -19,7 +19,7 @@ int main()
 	bool close = false;
 	NetworkHandler network;
 
-	
+	network.udpBind();
 	if (!network.connect(&newclock))
 	{
 		cout << "fail" << endl;

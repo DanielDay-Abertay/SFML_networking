@@ -11,11 +11,27 @@ NetworkHandler::NetworkHandler()
 NetworkHandler::~NetworkHandler()
 {
 }
+void NetworkHandler::udpBind()
+{
+	unsigned short port = 4441;
+
+
+	if (socket.bind(port) != sf::Socket::Done)
+	{
+		cout << "failed to bind" << endl;
+		return;
+	}
+	//std::cout << "Server is listening to port " << port << ", waiting for a message... " << std::endl;
+
+
+
+}
 
 bool NetworkHandler::connect(sf::Clock *clock)
 {
 	// Ask for the server address
 	sf::IpAddress newIp;
+	cout << newIp.getLocalAddress() << " " << newIp.getPublicAddress() << endl;
 	do
 	{
 		std::cout << "Type the address or name of the server to connect to: ";
@@ -117,7 +133,7 @@ void NetworkHandler::confirmTimeStamp()
 bool NetworkHandler::sendPacket(sf::Packet packet, sf::IpAddress ip)
 {
 	port = 4444;
-	cout << ip << endl;
+	//cout << ip << endl;
 	if (socket.send(packet, ip, port) != sf::Socket::Done)
 	{
 		return false;

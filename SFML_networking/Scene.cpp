@@ -60,7 +60,7 @@ void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 	{
 		
 		customPacket.fillPacket(position, packet);
-		network->sendPacket(packet);
+		network->sendPacket(packet, network->getServerIp());
 		
 		
 		numberOfTimes = 0;

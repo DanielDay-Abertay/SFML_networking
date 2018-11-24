@@ -37,7 +37,7 @@ class NetworkHandler
 public:
 	NetworkHandler();
 	~NetworkHandler();
-
+	void udpBind();
 	bool connect(sf::Clock *clock);
 	void confirmTimeStamp();
 	sf::Int32 getTimeStamp() { return timeStamp; }
@@ -51,6 +51,7 @@ public:
 
 
 protected:
+	sf::IpAddress server;
 	sf::IpAddress serverIp;
 	sf::UdpSocket socket;
 	unsigned short port;
