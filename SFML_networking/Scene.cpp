@@ -44,69 +44,41 @@ Scene::~Scene()
 
 void Scene::update(float dt, NetworkHandler* network, sf::Clock *clock)
 {
-	/*for (auto it : emitter)
-	{
-		it->update(dt);
-	}*/
+
 	setDirection(direction*speed*dt);
 	emitter->update(dt, mousePos);
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
 	position.timeStamp = clock->getElapsedTime().asMilliseconds();
-//	cout << packet.getDataSize() << endl;;
+
 
 	if (clock->getElapsedTime().asMilliseconds() - 50 > timeSent )
-	{
-	
-		//if (move)
-		//{
-			customPacket.fillPacket(position, packet);
-			network->sendPacket(packet, network->getServerIp());
-			timeSent = clock->getElapsedTime().asMilliseconds();
-			cout << timeSent << endl;
-		//}	
-		
+	{		
+		customPacket.fillPacket(position, packet);
+		network->sendPacket(packet, network->getServerIp());
+		timeSent = clock->getElapsedTime().asMilliseconds();
+				
 		numberOfTimes = 0;
-	}
-	
+	}	
 
 	numberOfTimes++;
 	
 }
 
 void Scene::handleInput(float dt)
-{
-
-	mousePos = sf::Vector2f(input->getMouseX(), input->getMouseY());
-	/*if (input->isButtonDown(sf::Mouse::Left))
-	{
-		input->setMouseUp(sf::Keyboard::Left);
-		sf::Vector2f mousePos = { (float)input->getMouseX(), (float)input->getMouseY() };
-		emitter.push_back(new Emitter);
-		emitter.back()->init(10, mousePos, &texture);
-		
-	}*/
+{	
 	if (wasdMovement())
 	{
 		move = true;
 	}
 	else
-		move = false;
-	
-	
-	
-	
+		move = false;	
 }
 
 void Scene::render()
 {
 	beginRender();
-
-	/*for (auto it : emitter)
-	{
-		it->render(window);
-	}*/
 
 	emitter->render(window);
 
@@ -155,11 +127,9 @@ bool Scene::wasdMovement()
 		return false;
 	}
 	return true;
-	//setDirection(direction);
 }
 
 void Scene::setDirection(sf::Vector2f direction)
-{
-	
+{	
 	emitter->setLocation(direction);
 }
