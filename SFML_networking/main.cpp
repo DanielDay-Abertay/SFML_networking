@@ -30,7 +30,7 @@ int main()
 	//newclock.getElapsedTime.restart();
 	
 	Scene scene(&window, &input);
-	scene.init();
+	scene.init(network.getSeed());
 
 
 	while (window.isOpen())

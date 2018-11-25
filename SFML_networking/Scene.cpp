@@ -12,7 +12,7 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in)
 	numberOfTimes = 0;
 }
 
-void Scene::init()
+void Scene::init(int seed)
 {
 	texture.loadFromFile("gfx/explosion00.png");
 	/*emitter.push_back(new Emitter);
@@ -20,7 +20,7 @@ void Scene::init()
 	emitter.back()->init(10, sf::Vector2f(0,0), &texture);*/
 
 	emitter = new Emitter;
-	emitter->init(10, sf::Vector2f(100, 100), &texture);
+	emitter->init(10, sf::Vector2f(100, 100), &texture, seed);
 
 }
 void Scene::cleanUp()

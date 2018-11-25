@@ -11,7 +11,7 @@ class Scene
 public:
 	Scene(sf::RenderWindow* hwnd, Input* in);
 	~Scene();
-	void init();
+	void init(int seed);
 	void cleanUp();
 	void update(float dt, NetworkHandler* network, sf::Clock *clock);
 	void handleInput(float dt);

@@ -11,7 +11,7 @@ Emitter::~Emitter()
 {
 }
 
-void Emitter::init(int amount, sf::Vector2f pos, sf::Texture* texture)
+void Emitter::init(int amount, sf::Vector2f pos, sf::Texture* texture, int seed)
 {
 
 	particleVec = new std::vector<Particle*>;
@@ -20,7 +20,7 @@ void Emitter::init(int amount, sf::Vector2f pos, sf::Texture* texture)
 
 	for (int i = 0; i < amount; i++)
 	{
-		particleVec->push_back(new Particle);
+		particleVec->push_back(new Particle(seed));
 		particleVec->back()->init(position,sf::Vector2f(0,0));
 		particleVec->back()->setTexture(texture);
 		//particleVec->back()->setPosition(sf::Vector2f(100.0f, 100.0f));

@@ -108,10 +108,14 @@ bool NetworkHandler::receivePacket()
 	{
 		return false;
 	}
-	if (pack.checkPacket(receivedPacket, &info))
+	if (receivedPacket.getDataSize() == 20)
 	{
-		return true;
+		if (pack.checkPacket(receivedPacket, &info))
+		{
+			return true;
+		}
 	}
+	
 	
 	if (pack.checkPacket(receivedPacket, &other))
 	{

@@ -16,6 +16,8 @@ struct playerInfo
 	bool timeOkay = false;
 	bool timeSent = false;
 	int ID = NULL;
+	int seed;
+	int padding;
 };
 
 struct playerPos
@@ -48,6 +50,7 @@ public:
 	void update(sf::Clock *clock);
 	void setServerIp(sf::IpAddress ip);
 	sf::IpAddress getServerIp() { return serverIp; }
+	int getSeed() { return seed; }
 
 
 protected:
@@ -70,5 +73,7 @@ protected:
 	sf::Uint32 timeStamp;
 
 	otherPlayerInfo other;
+
+	int seed;
 };
 

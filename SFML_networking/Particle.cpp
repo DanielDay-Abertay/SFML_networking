@@ -2,8 +2,9 @@
 
 
 
-Particle::Particle(const sf::Vector2f& size) : Sprite(size)
+Particle::Particle(int seed, const sf::Vector2f& size) : Sprite(size)
 {
+	srand(seed);
 }
 
 
@@ -14,7 +15,7 @@ Particle::~Particle()
 void Particle::init(sf::Vector2f pos, sf::Vector2f mousePos)
 {
 	sf::Vector2f vel = mousePos - pos;
-
+	
 	float randX = rand() % 200;
 	if (randX < 100)
 	{
@@ -63,7 +64,7 @@ void Particle::update(float dt)
 	
 	move(getVelocity() * dt);
 	acceleration *= 0.f;
-	//std::cout << "X: " << getPosition().x << " Y: " << getPosition().y << std::endl;
+//	std::cout << "X: " << getPosition().x << " Y: " << getPosition().y << std::endl;
 
 }
 
