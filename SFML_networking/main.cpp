@@ -17,10 +17,10 @@ int main()
 	sf::Clock newclock;
 	float deltaTime;
 	bool close = false;
-	NetworkHandler network;
+	NetworkHandler network(&newclock);
 
 	network.udpBind();
-	if (!network.connect(&newclock))
+	if (!network.connect())
 	{
 		cout << "fail" << endl;
 	}
@@ -74,7 +74,7 @@ int main()
 			deltaTime = clock.restart().asSeconds();			
 			scene.handleInput(deltaTime);
 			scene.update(deltaTime, &network, &newclock);
-			network.update(&newclock);
+			network.update();
 			scene.render();
 		}
 		else

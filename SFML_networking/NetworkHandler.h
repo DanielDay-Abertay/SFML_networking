@@ -33,24 +33,28 @@ struct otherPlayerInfo
 {
 	int size;
 	std::list<playerPos> networkPlayerPos;
+	int padding;
 };
 class NetworkHandler
 {
 public:
-	NetworkHandler();
+	NetworkHandler(sf::Clock* c);
 	~NetworkHandler();
 	void udpBind();
-	bool connect(sf::Clock *clock);
+	bool connect();
 	void confirmTimeStamp();
 	sf::Int32 getTimeStamp() { return timeStamp; }
 
 	bool sendPacket(sf::Packet packet, sf::IpAddress ip);
 	bool receivePacket();
 
-	void update(sf::Clock *clock);
+	void update();
 	void setServerIp(sf::IpAddress ip);
 	sf::IpAddress getServerIp() { return serverIp; }
 	int getSeed() { return seed; }
+
+
+	bool receiveTimeout();
 
 
 protected:
@@ -75,5 +79,9 @@ protected:
 	otherPlayerInfo other;
 
 	int seed;
+
+	sf::Uint32 timeOut;
+
+	sf::Clock* clock;
 };
 

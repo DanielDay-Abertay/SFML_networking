@@ -59,7 +59,7 @@ bool CustomPacket::checkPacket(sf::Packet &packet, otherPlayerInfo *networkPlaye
 		packet >> item.timeStamp >>item.xPos >> item.yPos >> item.ID;
 		networkPlayers->networkPlayerPos.push_back(item);
 	}
-	
+	packet >> networkPlayers->padding;
 	return true;
 	
 }

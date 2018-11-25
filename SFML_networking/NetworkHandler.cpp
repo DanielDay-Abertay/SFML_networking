@@ -2,8 +2,10 @@
 
 
 
-NetworkHandler::NetworkHandler()
+NetworkHandler::NetworkHandler(sf::Clock* c)
 {
+	clock = c;
+	socket.setBlocking(false);
 	port = 4444;
 }
 
@@ -27,7 +29,7 @@ void NetworkHandler::udpBind()
 
 }
 
-bool NetworkHandler::connect(sf::Clock *clock)
+bool NetworkHandler::connect()
 {
 	// Ask for the server address
 	sf::IpAddress newIp;
@@ -56,24 +58,24 @@ bool NetworkHandler::connect(sf::Clock *clock)
 
 	}
 	cout << "request sent" << endl;
-
-	if (!receivePacket())
+	
+	if (!receiveTimeout())
 	{
-		cout << "Failed to receive" << endl;
+		return false;
 	}
+
+	
 	cout << "your Id is " << info.ID << endl;
 	cout << "connection aquired" << endl;
 	cout << "wainting for time stamp" << endl;
 
 
 	//waiting to be sent a time stamp
-	if (!receivePacket())
+	if (!receiveTimeout())
 	{
-		cout << "Failed to receive" << endl;
+		return false;
 	}
 	cout << "timeTamp = " << info.timeStamp << endl;
-	clock->restart();
-	info.timeStamp += clock->getElapsedTime().asMilliseconds();
 
 	//if the time stamp has been recived it will send it back to confurm
 	if (info.timeSent)
@@ -92,8 +94,6 @@ bool NetworkHandler::connect(sf::Clock *clock)
 
 		}
 		//cout << "sent time stamp at " << info.timeStamp << endl;
-		timeStamp = info.timeStamp;
-		socket.setBlocking(false);
 	}
 
 
@@ -119,7 +119,11 @@ bool NetworkHandler::receivePacket()
 	
 	if (pack.checkPacket(receivedPacket, &other))
 	{
-		return true;
+		if (other.size > 0)
+		{
+			return true;
+		}
+		
 	}
 	return false;
 
@@ -146,7 +150,7 @@ bool NetworkHandler::sendPacket(sf::Packet packet, sf::IpAddress ip)
 
 }
 
-void NetworkHandler::update(sf::Clock *clock)
+void NetworkHandler::update()
 {
 	timeStamp = info.timeStamp + clock->getElapsedTime().asMilliseconds();
 
@@ -168,4 +172,21 @@ void NetworkHandler::update(sf::Clock *clock)
 void NetworkHandler::setServerIp(sf::IpAddress ip)
 {
 	serverIp = ip;
+}
+
+bool NetworkHandler::receiveTimeout()
+{
+	timeOut = clock->getElapsedTime().asMilliseconds();
+	while (true)
+	{
+		if (clock->getElapsedTime().asMilliseconds() >= timeOut + 100)
+		{
+			cout << "time out" << endl;
+			return false;
+		}
+		else if (receivePacket())
+		{
+			return true;
+		}
+	}
 }
