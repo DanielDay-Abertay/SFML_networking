@@ -42,7 +42,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
+void Scene::update(float dt, NetworkHandler* network, sf::Clock *clock)
 {
 	/*for (auto it : emitter)
 	{
@@ -53,15 +53,19 @@ void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
-	position.timeStamp = time;
+	position.timeStamp = clock->getElapsedTime().asMilliseconds();
 //	cout << packet.getDataSize() << endl;;
 
-	if (numberOfTimes == 10)
+	if (clock->getElapsedTime().asMilliseconds() - 50 > timeSent )
 	{
-		
-		customPacket.fillPacket(position, packet);
-		network->sendPacket(packet, network->getServerIp());
-		
+	
+		//if (move)
+		//{
+			customPacket.fillPacket(position, packet);
+			network->sendPacket(packet, network->getServerIp());
+			timeSent = clock->getElapsedTime().asMilliseconds();
+			cout << timeSent << endl;
+		//}	
 		
 		numberOfTimes = 0;
 	}

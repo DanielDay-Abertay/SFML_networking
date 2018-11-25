@@ -26,7 +26,7 @@ int main()
 	}
 	network.confirmTimeStamp();
 
-	sf::Int32 timeStamp = network.getTimeStamp();
+	sf::Int32 cliantTimeStamp = newclock.getElapsedTime().asMilliseconds();
 	//newclock.getElapsedTime.restart();
 	
 	Scene scene(&window, &input);
@@ -70,10 +70,10 @@ int main()
 			}
 		}
 		if (!close) {
-			timeStamp += clock.getElapsedTime().asMilliseconds();
+			//timeStamp += clock.getElapsedTime().asMilliseconds();
 			deltaTime = clock.restart().asSeconds();			
 			scene.handleInput(deltaTime);
-			scene.update(deltaTime, &network, timeStamp);
+			scene.update(deltaTime, &network, &newclock);
 			network.update(&newclock);
 			scene.render();
 		}
