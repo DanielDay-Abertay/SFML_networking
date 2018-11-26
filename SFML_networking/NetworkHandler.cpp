@@ -110,6 +110,7 @@ bool NetworkHandler::receivePacket()
 	}
 	if (receivedPacket.getDataSize() == 20)
 	{
+	
 		if (pack.checkPacket(receivedPacket, &info))
 		{
 			return true;
@@ -141,7 +142,7 @@ void NetworkHandler::confirmTimeStamp()
 bool NetworkHandler::sendPacket(sf::Packet packet, sf::IpAddress ip)
 {
 	port = 4444;
-	//cout << ip << endl;
+	cout << packet.getDataSize() << endl;
 	if (socket.send(packet, ip, port) != sf::Socket::Done)
 	{
 		return false;
@@ -176,10 +177,12 @@ void NetworkHandler::setServerIp(sf::IpAddress ip)
 
 bool NetworkHandler::receiveTimeout()
 {
-	timeOut = clock->getElapsedTime().asMilliseconds();
+	timeOut = clock->getElapsedTime().asMilliseconds() + 2000;
+	sf::Uint32 currentTime;
 	while (true)
 	{
-		if (clock->getElapsedTime().asMilliseconds() >= timeOut + 100)
+		currentTime = clock->getElapsedTime().asMilliseconds();
+		if (currentTime > timeOut)
 		{
 			cout << "time out" << endl;
 			return false;

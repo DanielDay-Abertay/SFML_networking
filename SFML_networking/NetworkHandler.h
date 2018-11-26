@@ -10,12 +10,12 @@ using namespace std;
 
 struct playerInfo
 {
-	bool connectRequest = false;
-	bool connectAccepted = false;
-	sf::Uint32 timeStamp = NULL;
-	bool timeOkay = false;
-	bool timeSent = false;
-	int ID = NULL;
+	bool connectRequest;
+	bool connectAccepted;
+	sf::Uint32 timeStamp;
+	bool timeOkay;
+	bool timeSent;
+	int ID ;
 	int seed;
 	int padding;
 };
