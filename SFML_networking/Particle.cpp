@@ -69,7 +69,7 @@ void Particle::update(float dt)
 
 bool Particle::offScreen()
 {
-	if (getPosition().y > 1080)
+	if (getPosition().y > 900)
 	{
 		return true;
 	}
@@ -77,7 +77,7 @@ bool Particle::offScreen()
 	{
 		return true;
 	}
-	else if (getPosition().x > 1920)
+	else if (getPosition().x > 1600)
 	{
 		return true;
 	}
