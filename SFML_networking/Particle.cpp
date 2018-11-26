@@ -12,9 +12,8 @@ Particle::~Particle()
 {
 }
 
-void Particle::init(sf::Vector2f pos, sf::Vector2f mousePos)
+void Particle::init(sf::Vector2f pos)
 {
-	sf::Vector2f vel = mousePos - pos;
 	
 	float randX = rand() % 200;
 	if (randX < 100)
@@ -70,7 +69,7 @@ void Particle::update(float dt)
 
 bool Particle::offScreen()
 {
-	if (getPosition().y > 1080)
+	if (getPosition().y > 900)
 	{
 		return true;
 	}
@@ -78,7 +77,7 @@ bool Particle::offScreen()
 	{
 		return true;
 	}
-	else if (getPosition().x > 1920)
+	else if (getPosition().x > 1600)
 	{
 		return true;
 	}

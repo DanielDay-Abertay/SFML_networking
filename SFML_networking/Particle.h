@@ -10,7 +10,7 @@ public:
 	void update(float dt);
 	void setDirection(sf::Vector2f dir) { direction = dir; }
 
-	void init(sf::Vector2f pos, sf::Vector2f mousePos);
+	void init(sf::Vector2f pos);
 	bool offScreen();
 	void reset();
 

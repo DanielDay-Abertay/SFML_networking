@@ -2,8 +2,9 @@
 
 
 
-Scene::Scene(sf::RenderWindow* hwnd, Input* in)
+Scene::Scene(sf::RenderWindow* hwnd, Input* in, NetworkHandler* net)
 {
+	network = net;
 	window = hwnd;
 	input = in;
 
@@ -12,9 +13,10 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in)
 	numberOfTimes = 0;
 }
 
-void Scene::init(int seed)
+void Scene::init(int se)
 {
-	texture.loadFromFile("gfx/explosion00.png");
+	seed = seed;
+	texture.loadFromFile("gfx/shrek.png");
 	/*emitter.push_back(new Emitter);
 	
 	emitter.back()->init(10, sf::Vector2f(0,0), &texture);*/
@@ -46,14 +48,14 @@ void Scene::update(float dt, NetworkHandler* network, sf::Clock *clock)
 {
 
 	setDirection(direction*speed*dt);
-	emitter->update(dt, mousePos);
+	emitter->update(dt);
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
 	position.timeStamp = clock->getElapsedTime().asMilliseconds();
 
 
-	if (clock->getElapsedTime().asMilliseconds() - 50 > timeSent )
+	if (clock->getElapsedTime().asMilliseconds() - 50 >= timeSent )
 	{		
 		customPacket.fillPacket(position, packet);
 		network->sendPacket(packet, network->getServerIp());
@@ -132,4 +134,25 @@ bool Scene::wasdMovement()
 void Scene::setDirection(sf::Vector2f direction)
 {	
 	emitter->setLocation(direction);
+}
+
+void Scene::networkUpdate(float dt)
+{
+	if (network->getOther()->networkPlayerPos.size() != posVec.size())
+	{
+		Emitter em;
+		float x = network->getOther()->networkPlayerPos.back().xPos;
+		float y = network->getOther()->networkPlayerPos.back().yPos;
+		sf::Vector2f pos{ x, y };
+		em.init(10, pos, nullptr, seed);
+		posVec.push_back(em);
+	}
+
+	for (int i = 0; i < posVec.size(); i++)
+	{
+		float x = network->getOther()->networkPlayerPos.back().xPos;
+		float y = network->getOther()->networkPlayerPos.back().yPos;
+		posVec[i].setLocation(sf::Vector2f(x, y));
+		posVec[i].update(dt);
+	}
 }
