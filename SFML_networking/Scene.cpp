@@ -83,6 +83,10 @@ void Scene::render()
 	beginRender();
 
 	emitter->render(window);
+	for (auto it : posVec)
+	{
+		it.render(window);
+	}
 
 	endRender();
 }
