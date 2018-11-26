@@ -147,7 +147,7 @@ void Scene::setDirection(sf::Vector2f direction)
 
 void Scene::networkUpdate(float dt)
 {
-	if (network->getOther()->networkPlayerPos.size() != posVec.size())
+	if (network->getOther()->networkPlayerPos.size() > posVec.size())
 	{
 		Emitter em;
 		float x = network->getOther()->networkPlayerPos.back().xPos;
@@ -157,10 +157,12 @@ void Scene::networkUpdate(float dt)
 		posVec.push_back(em);
 	}
 
+
+	//this is broken need to fix, network-get other ->networkPlayerpos is a list cant loop over easily. may change to vector 
 	for (int i = 0; i < posVec.size(); i++)
 	{
-		float x = network->getOther()->networkPlayerPos.back().xPos;
-		float y = network->getOther()->networkPlayerPos.back().yPos;
+		float x = network->getOther()->networkPlayerPos[i].xPos;
+		float y = network->getOther()->networkPlayerPos[i].yPos;
 		posVec[i].setLocation(sf::Vector2f(x, y));
 		posVec[i].update(dt);
 	}
