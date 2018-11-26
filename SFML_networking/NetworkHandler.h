@@ -53,9 +53,9 @@ public:
 	sf::IpAddress getServerIp() { return serverIp; }
 	int getSeed() { return seed; }
 
-
+	otherPlayerInfo *getOther() { return &other; }
 	bool receiveTimeout();
-
+	int getID() { return posInfo.ID; }
 
 protected:
 	sf::IpAddress server;
@@ -83,5 +83,8 @@ protected:
 	sf::Uint32 timeOut;
 
 	sf::Clock* clock;
+
+
+	std::vector<playerPos> networkPlayerPos;
 };
 

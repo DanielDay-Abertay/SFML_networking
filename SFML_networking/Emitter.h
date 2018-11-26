@@ -10,7 +10,7 @@ public:
 
 	void init(int amount, sf::Vector2f pos, sf::Texture* texture, int seed);
 	void cleanUp();
-	void update(float dt, sf::Vector2f mousePos);
+	void update(float dt);
 	void render(sf::RenderWindow* window);
 
 	void setLocation(sf::Vector2f pos);

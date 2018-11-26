@@ -9,7 +9,7 @@
 class Scene
 {
 public:
-	Scene(sf::RenderWindow* hwnd, Input* in);
+	Scene(sf::RenderWindow* hwnd, Input* in, NetworkHandler* net);
 	~Scene();
 	void init(int seed);
 	void cleanUp();
@@ -19,6 +19,9 @@ public:
 
 	bool wasdMovement();
 	void setDirection(sf::Vector2f direction);
+
+	void networkUpdate(float dt);
+	int getID() { return position.ID; }
 
 
 private:
@@ -34,14 +37,16 @@ private:
 	sf::Vector2f mousePos;
 	sf::Vector2f movement;
 
-
+	vector<Emitter> posVec;
 	playerPos position;
 	CustomPacket customPacket;
 	sf::Packet packet;
 	int numberOfTimes;
 
 	sf::Uint32 timeSent;
-
+	NetworkHandler* network;
 	bool move;
+
+	int seed;
 };
 

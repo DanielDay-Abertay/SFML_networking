@@ -29,7 +29,7 @@ int main()
 	sf::Int32 cliantTimeStamp = newclock.getElapsedTime().asMilliseconds();
 	//newclock.getElapsedTime.restart();
 	
-	Scene scene(&window, &input);
+	Scene scene(&window, &input, &network);
 	scene.init(network.getSeed());
 
 
@@ -75,6 +75,7 @@ int main()
 			scene.handleInput(deltaTime);
 			scene.update(deltaTime, &network, &newclock);
 			network.update();
+			scene.networkUpdate(deltaTime);
 			scene.render();
 		}
 		else

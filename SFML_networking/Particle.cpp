@@ -12,9 +12,8 @@ Particle::~Particle()
 {
 }
 
-void Particle::init(sf::Vector2f pos, sf::Vector2f mousePos)
+void Particle::init(sf::Vector2f pos)
 {
-	sf::Vector2f vel = mousePos - pos;
 	
 	float randX = rand() % 200;
 	if (randX < 100)
