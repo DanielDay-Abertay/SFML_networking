@@ -16,7 +16,7 @@ Scene::Scene(sf::RenderWindow* hwnd, Input* in, NetworkHandler* net)
 void Scene::init(int se)
 {
 	seed = seed;
-	texture.loadFromFile("gfx/shrek.png");
+	texture.loadFromFile("gfx/explosion00.png");
 	/*emitter.push_back(new Emitter);
 	
 	emitter.back()->init(10, sf::Vector2f(0,0), &texture);*/
@@ -83,6 +83,11 @@ void Scene::render()
 	beginRender();
 
 	emitter->render(window);
+
+	for (auto it : posVec)
+	{
+		it.render(window);
+	}
 
 	endRender();
 }

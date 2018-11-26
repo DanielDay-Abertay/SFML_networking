@@ -161,7 +161,7 @@ void NetworkHandler::update()
 
 	for (std::list<playerPos>::const_iterator it = other.networkPlayerPos.begin(); it != other.networkPlayerPos.end(); ++it)
 	{
-		cout << it->xPos << " " << it->yPos << endl;
+		//cout << it->xPos << " " << it->yPos << endl;
 	}
 
 
