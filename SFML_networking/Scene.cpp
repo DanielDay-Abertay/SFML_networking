@@ -53,7 +53,7 @@ void Scene::update(float dt, NetworkHandler* network, sf::Clock *clock)
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
 	position.timeStamp = clock->getElapsedTime().asMilliseconds();
-
+	position.ID = network->getID();
 
 	if (clock->getElapsedTime().asMilliseconds() - 50 >= timeSent )
 	{		
@@ -88,10 +88,6 @@ void Scene::render()
 		it.render(window);
 	}
 
-	for (auto it : posVec)
-	{
-		it.render(window);
-	}
 
 	endRender();
 }
@@ -149,6 +145,7 @@ void Scene::networkUpdate(float dt)
 {
 	if (network->getOther()->networkPlayerPos.size() > posVec.size())
 	{
+		
 		Emitter em;
 		float x = network->getOther()->networkPlayerPos.back().xPos;
 		float y = network->getOther()->networkPlayerPos.back().yPos;
@@ -161,9 +158,18 @@ void Scene::networkUpdate(float dt)
 	//this is broken need to fix, network-get other ->networkPlayerpos is a list cant loop over easily. may change to vector 
 	for (int i = 0; i < posVec.size(); i++)
 	{
-		float x = network->getOther()->networkPlayerPos[i].xPos;
-		float y = network->getOther()->networkPlayerPos[i].yPos;
-		posVec[i].setLocation(sf::Vector2f(x, y));
-		posVec[i].update(dt);
+		if (network->getOther()->networkPlayerPos[i].ID != network->getID())
+		{
+			float x = network->getOther()->networkPlayerPos[i].xPos;
+			float y = network->getOther()->networkPlayerPos[i].yPos;
+			posVec[i].setLocationNetwork(sf::Vector2f(x, y));
+			posVec[i].update(dt);
+			posVec[i].setNoRender(false);
+		}
+		else
+		{
+			posVec[i].setNoRender(true);
+		}
+		
 	}
 }

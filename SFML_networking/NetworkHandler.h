@@ -32,7 +32,7 @@ struct playerPos
 struct otherPlayerInfo
 {
 	int size;
-	std::list<playerPos> networkPlayerPos;
+	std::vector<playerPos> networkPlayerPos;
 	int padding;
 };
 class NetworkHandler
@@ -55,7 +55,7 @@ public:
 
 	otherPlayerInfo *getOther() { return &other; }
 	bool receiveTimeout();
-	int getID() { return posInfo.ID; }
+	int getID() { return info.ID; }
 
 protected:
 	sf::IpAddress server;

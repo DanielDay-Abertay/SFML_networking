@@ -14,7 +14,9 @@ public:
 	void render(sf::RenderWindow* window);
 
 	void setLocation(sf::Vector2f pos);
+	void setLocationNetwork(sf::Vector2f pos);
 	sf::Vector2f getLocation() { return position; };
+	void setNoRender(bool ren) { noRender = ren; }
 
 private:
 
@@ -25,6 +27,8 @@ private:
 	sf::Vector2f direction;
 
 	float speed;
+
+	bool noRender;
 
 };
 

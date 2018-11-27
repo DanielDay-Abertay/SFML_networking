@@ -64,13 +64,21 @@ void Emitter::update(float dt)
 
 void Emitter::render(sf::RenderWindow* window)
 {
-	for (auto par : *particleVec)
+	if (!noRender)
 	{
-		window->draw(*par);
+		for (auto par : *particleVec)
+		{
+			window->draw(*par);
+		}
 	}
+	
 }
 
 void Emitter::setLocation(sf::Vector2f pos)
 {
 	position += pos;
+}
+void Emitter::setLocationNetwork(sf::Vector2f pos)
+{
+	position = pos;
 }

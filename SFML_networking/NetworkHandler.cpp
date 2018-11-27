@@ -142,7 +142,7 @@ void NetworkHandler::confirmTimeStamp()
 bool NetworkHandler::sendPacket(sf::Packet packet, sf::IpAddress ip)
 {
 	port = 4444;
-	cout << packet.getDataSize() << endl;
+	//cout << packet.getDataSize() << endl;
 	if (socket.send(packet, ip, port) != sf::Socket::Done)
 	{
 		return false;
@@ -160,10 +160,6 @@ void NetworkHandler::update()
 		return;
 	}
 
-	for (std::list<playerPos>::const_iterator it = other.networkPlayerPos.begin(); it != other.networkPlayerPos.end(); ++it)
-	{
-		//cout << it->xPos << " " << it->yPos << endl;
-	}
 
 
 
