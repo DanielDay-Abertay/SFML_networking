@@ -44,7 +44,7 @@ Scene::~Scene()
 {
 }
 
-void Scene::update(float dt, NetworkHandler* network, sf::Clock *clock)
+void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 {
 
 	setDirection(direction*speed*dt);
@@ -52,14 +52,14 @@ void Scene::update(float dt, NetworkHandler* network, sf::Clock *clock)
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
-	position.timeStamp = clock->getElapsedTime().asMilliseconds();
+	position.timeStamp = time;
+	position.ID = network->getID();
 
-
-	if (clock->getElapsedTime().asMilliseconds() - 50 >= timeSent )
+	if (time - 50 >= timeSent )
 	{		
 		customPacket.fillPacket(position, packet);
 		network->sendPacket(packet, network->getServerIp());
-		timeSent = clock->getElapsedTime().asMilliseconds();
+		timeSent = time;
 				
 		numberOfTimes = 0;
 	}	
@@ -150,6 +150,7 @@ void Scene::networkUpdate(float dt)
 	if (network->getOther()->networkPlayerPos.size() > posVec.size())
 	{
 		Emitter em;
+		em.setId(network->getOther()->networkPlayerPos.back().ID);
 		float x = network->getOther()->networkPlayerPos.back().xPos;
 		float y = network->getOther()->networkPlayerPos.back().yPos;
 		sf::Vector2f pos{ x, y };
@@ -161,9 +162,45 @@ void Scene::networkUpdate(float dt)
 	//this is broken need to fix, network-get other ->networkPlayerpos is a list cant loop over easily. may change to vector 
 	for (int i = 0; i < posVec.size(); i++)
 	{
+		//network->getOther()->networkPlayerPos[i].xPos = ;
 		float x = network->getOther()->networkPlayerPos[i].xPos;
 		float y = network->getOther()->networkPlayerPos[i].yPos;
-		posVec[i].setLocation(sf::Vector2f(x, y));
+		sf::Vector2f d(x, y);
+		sf::Vector2f d1(network->getOther()->networkPlayerPos1[i].xPos, network->getOther()->networkPlayerPos1[i].yPos);
+
+		sf::Uint32 time1 = network->getOther()->networkPlayerPos1[i].timeStamp;
+		sf::Uint32 time = network->getOther()->networkPlayerPos[i].timeStamp;
+		float timediff = (time - time1);
+		cout << timediff << endl;
+		sf::Vector2f diffrence = (d - d1);
+		
+		if (diffrence == sf::Vector2f(0.f, 0.f))
+		{
+			
+			sf::Vector2f temp(network->getOther()->networkPlayerPos[i].xPos, network->getOther()->networkPlayerPos[i].yPos);
+			posVec[i].setLocationNetwork(temp);
+			//cout << "yikes" << endl;
+			
+		}
+		else
+		{
+			
+			//diffrence = diffrence / timediff;
+
+			/*float x = network->getOther()->networkPlayerPos[i].xPos;
+			float y = network->getOther()->networkPlayerPos[i].yPos;*/
+			sf::Vector2f velocity = diffrence * (timediff / 1000);
+			float newX = velocity.x + d.x;
+			float newY = velocity.y + d.y;
+			sf::Vector2f position(newX, newY);
+			
+			posVec[i].setLocationNetwork(position);
+
+		
+		}
+		
+		
 		posVec[i].update(dt);
+		//cout << posVec[i].getLocation().x << " " << posVec[i].getLocation().y << endl;
 	}
 }

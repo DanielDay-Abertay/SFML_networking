@@ -74,3 +74,7 @@ void Emitter::setLocation(sf::Vector2f pos)
 {
 	position += pos;
 }
+void Emitter::setLocationNetwork(sf::Vector2f pos)
+{
+	position = pos;
+}

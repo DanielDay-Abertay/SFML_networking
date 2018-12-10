@@ -96,7 +96,12 @@ bool NetworkHandler::connect()
 		//cout << "sent time stamp at " << info.timeStamp << endl;
 	}
 
-
+	if (!receiveTimeout())
+	{
+		return false;
+	}
+	cout << "latency between cliant and server is " << info.latency << endl;
+	serverTime = info.timeStamp + info.latency;
 
 	
 }
@@ -120,8 +125,27 @@ bool NetworkHandler::receivePacket()
 	
 	if (pack.checkPacket(receivedPacket, &other))
 	{
+		if (other.networkPlayerPos.size() != position.networkPlayerPos.size())
+		{
+			while (other.networkPlayerPos.size() != position.networkPlayerPos.size())
+			{
+				playerPos pos;				
+				position.networkPlayerPos2.push_back(pos);
+				position.networkPlayerPos1.push_back(pos);
+				position.networkPlayerPos.push_back(pos);
+			}
+		}
 		if (other.size > 0)
 		{
+			for (auto& it : other.networkPlayerPos)
+			{
+				position.networkPlayerPos2[it.ID] = position.networkPlayerPos1[it.ID];
+				position.networkPlayerPos1[it.ID] = position.networkPlayerPos[it.ID];
+				position.networkPlayerPos[it.ID] = it;
+				
+			}
+			
+
 			return true;
 		}
 		
@@ -142,7 +166,7 @@ void NetworkHandler::confirmTimeStamp()
 bool NetworkHandler::sendPacket(sf::Packet packet, sf::IpAddress ip)
 {
 	port = 4444;
-	cout << packet.getDataSize() << endl;
+	//cout << packet.getDataSize() << endl;
 	if (socket.send(packet, ip, port) != sf::Socket::Done)
 	{
 		return false;
@@ -160,10 +184,6 @@ void NetworkHandler::update()
 		return;
 	}
 
-	for (std::list<playerPos>::const_iterator it = other.networkPlayerPos.begin(); it != other.networkPlayerPos.end(); ++it)
-	{
-		//cout << it->xPos << " " << it->yPos << endl;
-	}
 
 
 

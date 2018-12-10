@@ -17,13 +17,12 @@ struct playerInfo
 	bool timeSent;
 	int ID ;
 	int seed;
-	int padding;
+	int latency;
 };
 
 struct playerPos
 {
-
-	sf::Uint32 timeStamp = NULL;
+	sf::Uint32 timeStamp;
 	float xPos;
 	float yPos;
 	int ID;
@@ -32,8 +31,16 @@ struct playerPos
 struct otherPlayerInfo
 {
 	int size;
-	std::list<playerPos> networkPlayerPos;
+	std::vector<playerPos> networkPlayerPos;
 	int padding;
+};
+
+struct positionData
+{
+	std::vector<playerPos> networkPlayerPos;
+	std::vector<playerPos> networkPlayerPos1;
+	std::vector<playerPos> networkPlayerPos2;
+
 };
 class NetworkHandler
 {
@@ -43,7 +50,7 @@ public:
 	void udpBind();
 	bool connect();
 	void confirmTimeStamp();
-	sf::Int32 getTimeStamp() { return timeStamp; }
+	sf::Int32 getTimeStamp() { return serverTime; }
 
 	bool sendPacket(sf::Packet packet, sf::IpAddress ip);
 	bool receivePacket();
@@ -53,9 +60,9 @@ public:
 	sf::IpAddress getServerIp() { return serverIp; }
 	int getSeed() { return seed; }
 
-	otherPlayerInfo *getOther() { return &other; }
+	positionData *getOther() { return &position; }
 	bool receiveTimeout();
-	int getID() { return posInfo.ID; }
+	int getID() { return info.ID; }
 
 protected:
 	sf::IpAddress server;
@@ -76,6 +83,7 @@ protected:
 
 	sf::Uint32 timeStamp;
 
+	sf::Uint32 serverTime;
 	otherPlayerInfo other;
 
 	int seed;
@@ -85,6 +93,7 @@ protected:
 	sf::Clock* clock;
 
 
-	std::vector<playerPos> networkPlayerPos;
+	positionData position;
+	
 };
 

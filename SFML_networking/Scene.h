@@ -13,7 +13,7 @@ public:
 	~Scene();
 	void init(int seed);
 	void cleanUp();
-	void update(float dt, NetworkHandler* network, sf::Clock *clock);
+	void update(float dt, NetworkHandler* network, sf::Uint32 time);
 	void handleInput(float dt);
 	void render();
 

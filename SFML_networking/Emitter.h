@@ -14,7 +14,10 @@ public:
 	void render(sf::RenderWindow* window);
 
 	void setLocation(sf::Vector2f pos);
+	void setLocationNetwork(sf::Vector2f pos);
 	sf::Vector2f getLocation() { return position; };
+	int getId() { return Id; }
+	void setId(int in) { Id = in; }
 
 private:
 
@@ -25,6 +28,8 @@ private:
 	sf::Vector2f direction;
 
 	float speed;
+
+	int Id;
 
 };
 

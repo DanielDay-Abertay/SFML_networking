@@ -24,10 +24,9 @@ int main()
 	{
 		cout << "fail" << endl;
 	}
-	network.confirmTimeStamp();
+	sf::Uint32 serverTime = network.getTimeStamp();
+	newclock.restart();
 
-	sf::Int32 cliantTimeStamp = newclock.getElapsedTime().asMilliseconds();
-	//newclock.getElapsedTime.restart();
 	
 	Scene scene(&window, &input, &network);
 	scene.init(network.getSeed());
@@ -71,9 +70,10 @@ int main()
 		}
 		if (!close) {
 			//timeStamp += clock.getElapsedTime().asMilliseconds();
+			sf::Uint32 timeStamp = serverTime + newclock.getElapsedTime().asMilliseconds();
 			deltaTime = clock.restart().asSeconds();			
 			scene.handleInput(deltaTime);
-			scene.update(deltaTime, &network, &newclock);
+			scene.update(deltaTime, &network, timeStamp);
 			network.update();
 			scene.networkUpdate(deltaTime);
 			scene.render();
