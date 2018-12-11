@@ -16,7 +16,6 @@ public:
 	void setLocation(sf::Vector2f pos);
 	void setLocationNetwork(sf::Vector2f pos);
 	sf::Vector2f getLocation() { return position; };
-
 	int getId() { return Id; }
 	void setId(int in) { Id = in; }
 	void setLastPacket(sf::Uint32 newTime) { lastPacketTime = newTime; }
@@ -26,7 +25,6 @@ public:
 
 	bool isLerping() { return lerping; }
 	void setLerp(bool ler) { lerping = ler; }
-
 
 private:
 
@@ -41,11 +39,6 @@ private:
 
 	int Id;
 
-
 	bool lerping;
-
-	bool noRender;
-
-
 };
 

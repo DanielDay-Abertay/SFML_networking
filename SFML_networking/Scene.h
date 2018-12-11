@@ -24,7 +24,7 @@ public:
 	int getID() { return position.ID; }
 
 	sf::Vector2f lerp(sf::Vector2f start, sf::Vector2f end, float percent);
-	
+
 
 
 private:

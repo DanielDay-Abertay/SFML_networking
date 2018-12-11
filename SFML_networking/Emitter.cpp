@@ -15,7 +15,7 @@ void Emitter::init(int amount, sf::Vector2f pos, sf::Texture* texture, int seed)
 {
 
 	particleVec = new std::vector<Particle*>;
-	
+
 	position = pos;
 
 	for (int i = 0; i < amount; i++)
@@ -48,7 +48,7 @@ void Emitter::update(float dt)
 		{
 
 			par->init(position); //need to implement
-			
+
 		}
 		else
 		{
@@ -56,22 +56,18 @@ void Emitter::update(float dt)
 			par->update(dt);
 		}
 
-		
-		
+
+
 	}
 
 }
 
 void Emitter::render(sf::RenderWindow* window)
 {
-	if (!noRender)
+	for (auto par : *particleVec)
 	{
-		for (auto par : *particleVec)
-		{
-			window->draw(*par);
-		}
+		window->draw(*par);
 	}
-	
 }
 
 void Emitter::setLocation(sf::Vector2f pos)

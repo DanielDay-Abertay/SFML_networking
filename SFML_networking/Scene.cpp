@@ -18,7 +18,7 @@ void Scene::init(int se)
 	seed = seed;
 	texture.loadFromFile("gfx/explosion00.png");
 	/*emitter.push_back(new Emitter);
-	
+
 	emitter.back()->init(10, sf::Vector2f(0,0), &texture);*/
 
 	emitter = new Emitter;
@@ -34,7 +34,7 @@ void Scene::cleanUp()
 		delete it;
 		it = nullptr;
 	}*/
-	
+
 	emitter->cleanUp();
 	delete emitter;
 	emitter = nullptr;
@@ -52,37 +52,32 @@ void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
-
 	position.timeStamp = time;
 	position.ID = network->getID();
 
-	
-
-	position.timeStamp = clock->getElapsedTime().asMilliseconds();
-	position.ID = network->getID();
 
 
-	if (time - 50 >= timeSent )
-	{		
+	if (time - 50 >= timeSent)
+	{
 		customPacket.fillPacket(position, packet);
 		network->sendPacket(packet, network->getServerIp());
 		timeSent = time;
-				
+
 		numberOfTimes = 0;
-	}	
+	}
 
 	numberOfTimes++;
-	
+
 }
 
 void Scene::handleInput(float dt)
-{	
+{
 	if (wasdMovement())
 	{
 		move = true;
 	}
 	else
-		move = false;	
+		move = false;
 }
 
 void Scene::render()
@@ -92,17 +87,12 @@ void Scene::render()
 	emitter->render(window);
 	for (auto it : posVec)
 	{
-
 		//if (it.getId() != network->getID())
 		{
 			it.render(window);
 		}
-		
-	}
 
-		it.render(window);
 	}
-
 
 	endRender();
 }
@@ -120,7 +110,7 @@ void Scene::endRender()
 
 bool Scene::wasdMovement()
 {
-	
+
 	if (input->isKeyDown(sf::Keyboard::W))
 	{
 		direction.y = -1;
@@ -152,7 +142,7 @@ bool Scene::wasdMovement()
 }
 
 void Scene::setDirection(sf::Vector2f direction)
-{	
+{
 	emitter->setLocation(direction);
 }
 
@@ -161,7 +151,6 @@ void Scene::networkUpdate(float dt)
 	//set up a new emitter if a new player has connected
 	if (network->getOther()->networkPlayerPos.size() > posVec.size())
 	{
-		
 		Emitter em;
 		em.setId(network->getOther()->networkPlayerPos.back().ID);
 		float x = network->getOther()->networkPlayerPos.back().xPos;
@@ -194,23 +183,23 @@ void Scene::networkUpdate(float dt)
 			{
 				posVec[i].setLastPacket(network->getOther()->networkPlayerPos[i].timeStamp);
 				posVec[i].setLerp(true);
-			}			
+			}
 
 			sf::Uint32 time1 = network->getOther()->networkPlayerPos1[i].timeStamp;
 			sf::Uint32 time = network->getOther()->networkPlayerPos[i].timeStamp;
 			float timediff = (time - time1);
-			
+
 			sf::Vector2f diffrence = (d - d1);
 
 			if (!posVec[i].isLerping())
-			{				
+			{
 				sf::Vector2f velocity = diffrence * (timediff / 1000);
 				float newX = velocity.x + d.x;
 				float newY = velocity.y + d.y;
 				sf::Vector2f position(newX, newY);
 
 				posVec[i].setLocationNetwork(position);
-				
+
 			}
 			else if (posVec[i].isLerping())
 			{
@@ -226,27 +215,11 @@ void Scene::networkUpdate(float dt)
 			posVec[i].update(dt);
 
 		}
-	}		
+	}
 }
 
 //will interperlate between two points by a given amount
 sf::Vector2f Scene::lerp(sf::Vector2f start, sf::Vector2f end, float percent)
 {
-	return (start + percent*(end - start));
-
-		if (network->getOther()->networkPlayerPos[i].ID != network->getID())
-		{
-			float x = network->getOther()->networkPlayerPos[i].xPos;
-			float y = network->getOther()->networkPlayerPos[i].yPos;
-			posVec[i].setLocationNetwork(sf::Vector2f(x, y));
-			posVec[i].update(dt);
-			posVec[i].setNoRender(false);
-		}
-		else
-		{
-			posVec[i].setNoRender(true);
-		}
-		
-	}
-
+	return (start + percent * (end - start));
 }
