@@ -55,6 +55,8 @@ void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 	position.timeStamp = time;
 	position.ID = network->getID();
 
+	
+
 	if (time - 50 >= timeSent )
 	{		
 		customPacket.fillPacket(position, packet);
@@ -85,12 +87,11 @@ void Scene::render()
 	emitter->render(window);
 	for (auto it : posVec)
 	{
-		it.render(window);
-	}
-
-	for (auto it : posVec)
-	{
-		it.render(window);
+		//if (it.getId() != network->getID())
+		{
+			it.render(window);
+		}
+		
 	}
 
 	endRender();
@@ -147,6 +148,7 @@ void Scene::setDirection(sf::Vector2f direction)
 
 void Scene::networkUpdate(float dt)
 {
+	//set up a new emitter if a new player has connected
 	if (network->getOther()->networkPlayerPos.size() > posVec.size())
 	{
 		Emitter em;
@@ -154,53 +156,70 @@ void Scene::networkUpdate(float dt)
 		float x = network->getOther()->networkPlayerPos.back().xPos;
 		float y = network->getOther()->networkPlayerPos.back().yPos;
 		sf::Vector2f pos{ x, y };
-		em.init(10, pos, nullptr, seed);
+		em.init(10, pos, &texture, seed);
 		posVec.push_back(em);
+		posVec[posVec.size() - 1].setLerp(false);
 	}
 
 
-	//this is broken need to fix, network-get other ->networkPlayerpos is a list cant loop over easily. may change to vector 
+	//loop through all the emitters in the vector
 	for (int i = 0; i < posVec.size(); i++)
 	{
-		//network->getOther()->networkPlayerPos[i].xPos = ;
-		float x = network->getOther()->networkPlayerPos[i].xPos;
-		float y = network->getOther()->networkPlayerPos[i].yPos;
-		sf::Vector2f d(x, y);
-		sf::Vector2f d1(network->getOther()->networkPlayerPos1[i].xPos, network->getOther()->networkPlayerPos1[i].yPos);
+		posVec[i].setId(network->getOther()->networkPlayerPos[i].ID);
 
-		sf::Uint32 time1 = network->getOther()->networkPlayerPos1[i].timeStamp;
-		sf::Uint32 time = network->getOther()->networkPlayerPos[i].timeStamp;
-		float timediff = (time - time1);
-		cout << timediff << endl;
-		sf::Vector2f diffrence = (d - d1);
-		
-		if (diffrence == sf::Vector2f(0.f, 0.f))
+		//checks to see if the id is not the id of the cliant
+		if (network->getID() != network->getOther()->networkPlayerPos[i].ID)
 		{
-			
-			sf::Vector2f temp(network->getOther()->networkPlayerPos[i].xPos, network->getOther()->networkPlayerPos[i].yPos);
-			posVec[i].setLocationNetwork(temp);
-			//cout << "yikes" << endl;
-			
-		}
-		else
-		{
-			
-			//diffrence = diffrence / timediff;
+			float x = network->getOther()->networkPlayerPos[i].xPos;
+			float y = network->getOther()->networkPlayerPos[i].yPos;
 
-			/*float x = network->getOther()->networkPlayerPos[i].xPos;
-			float y = network->getOther()->networkPlayerPos[i].yPos;*/
-			sf::Vector2f velocity = diffrence * (timediff / 1000);
-			float newX = velocity.x + d.x;
-			float newY = velocity.y + d.y;
-			sf::Vector2f position(newX, newY);
-			
-			posVec[i].setLocationNetwork(position);
 
-		
+			sf::Vector2f d(x, y);
+			sf::Vector2f d1(network->getOther()->networkPlayerPos1[i].xPos, network->getOther()->networkPlayerPos1[i].yPos);
+
+
+			//if the 
+			if (posVec[i].getLastPacket() != network->getOther()->networkPlayerPos[i].timeStamp)
+			{
+				posVec[i].setLastPacket(network->getOther()->networkPlayerPos[i].timeStamp);
+				posVec[i].setLerp(true);
+			}			
+
+			sf::Uint32 time1 = network->getOther()->networkPlayerPos1[i].timeStamp;
+			sf::Uint32 time = network->getOther()->networkPlayerPos[i].timeStamp;
+			float timediff = (time - time1);
+			
+			sf::Vector2f diffrence = (d - d1);
+
+			if (!posVec[i].isLerping())
+			{				
+				sf::Vector2f velocity = diffrence * (timediff / 1000);
+				float newX = velocity.x + d.x;
+				float newY = velocity.y + d.y;
+				sf::Vector2f position(newX, newY);
+
+				posVec[i].setLocationNetwork(position);
+				
+			}
+			else if (posVec[i].isLerping())
+			{
+				sf::Vector2f getPos = lerp(posVec[i].getLocation(), d, 0.5);
+				posVec[i].setLocationNetwork(getPos);
+
+				if (posVec[i].getLocation() == d)
+				{
+					posVec[i].setLerp(false);
+				}
+			}
+
+			posVec[i].update(dt);
+
 		}
-		
-		
-		posVec[i].update(dt);
-		//cout << posVec[i].getLocation().x << " " << posVec[i].getLocation().y << endl;
-	}
+	}		
+}
+
+//will interperlate between two points by a given amount
+sf::Vector2f Scene::lerp(sf::Vector2f start, sf::Vector2f end, float percent)
+{
+	return (start + percent*(end - start));
 }

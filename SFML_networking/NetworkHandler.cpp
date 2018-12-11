@@ -129,7 +129,8 @@ bool NetworkHandler::receivePacket()
 		{
 			while (other.networkPlayerPos.size() != position.networkPlayerPos.size())
 			{
-				playerPos pos;				
+				playerPos pos;
+				pos.timeStamp = 0;
 				position.networkPlayerPos2.push_back(pos);
 				position.networkPlayerPos1.push_back(pos);
 				position.networkPlayerPos.push_back(pos);
@@ -139,9 +140,13 @@ bool NetworkHandler::receivePacket()
 		{
 			for (auto& it : other.networkPlayerPos)
 			{
-				position.networkPlayerPos2[it.ID] = position.networkPlayerPos1[it.ID];
-				position.networkPlayerPos1[it.ID] = position.networkPlayerPos[it.ID];
-				position.networkPlayerPos[it.ID] = it;
+				if (it.timeStamp > position.networkPlayerPos[it.ID].timeStamp)
+				{
+					position.networkPlayerPos2[it.ID] = position.networkPlayerPos1[it.ID];
+					position.networkPlayerPos1[it.ID] = position.networkPlayerPos[it.ID];
+					position.networkPlayerPos[it.ID] = it;
+				}
+				
 				
 			}
 			

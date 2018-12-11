@@ -72,11 +72,13 @@ int main()
 			//timeStamp += clock.getElapsedTime().asMilliseconds();
 			sf::Uint32 timeStamp = serverTime + newclock.getElapsedTime().asMilliseconds();
 			deltaTime = clock.restart().asSeconds();			
+
 			scene.handleInput(deltaTime);
 			scene.update(deltaTime, &network, timeStamp);
 			network.update();
 			scene.networkUpdate(deltaTime);
 			scene.render();
+
 		}
 		else
 		{
