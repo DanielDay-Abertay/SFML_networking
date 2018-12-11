@@ -52,10 +52,15 @@ void Scene::update(float dt, NetworkHandler* network, sf::Uint32 time)
 
 	position.xPos = emitter->getLocation().x;
 	position.yPos = emitter->getLocation().y;
+
 	position.timeStamp = time;
 	position.ID = network->getID();
 
 	
+
+	position.timeStamp = clock->getElapsedTime().asMilliseconds();
+	position.ID = network->getID();
+
 
 	if (time - 50 >= timeSent )
 	{		
@@ -87,12 +92,17 @@ void Scene::render()
 	emitter->render(window);
 	for (auto it : posVec)
 	{
+
 		//if (it.getId() != network->getID())
 		{
 			it.render(window);
 		}
 		
 	}
+
+		it.render(window);
+	}
+
 
 	endRender();
 }
@@ -151,6 +161,7 @@ void Scene::networkUpdate(float dt)
 	//set up a new emitter if a new player has connected
 	if (network->getOther()->networkPlayerPos.size() > posVec.size())
 	{
+		
 		Emitter em;
 		em.setId(network->getOther()->networkPlayerPos.back().ID);
 		float x = network->getOther()->networkPlayerPos.back().xPos;
@@ -222,4 +233,20 @@ void Scene::networkUpdate(float dt)
 sf::Vector2f Scene::lerp(sf::Vector2f start, sf::Vector2f end, float percent)
 {
 	return (start + percent*(end - start));
+
+		if (network->getOther()->networkPlayerPos[i].ID != network->getID())
+		{
+			float x = network->getOther()->networkPlayerPos[i].xPos;
+			float y = network->getOther()->networkPlayerPos[i].yPos;
+			posVec[i].setLocationNetwork(sf::Vector2f(x, y));
+			posVec[i].update(dt);
+			posVec[i].setNoRender(false);
+		}
+		else
+		{
+			posVec[i].setNoRender(true);
+		}
+		
+	}
+
 }
